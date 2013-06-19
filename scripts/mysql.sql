@@ -1,13 +1,11 @@
 -- @copyright 2006-2012 City of Bloomington, Indiana
 -- @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.txt
--- @author Cliff Ingham <inghamn@bloomington.in.gov>
-create table people (
-	id int unsigned not null primary key auto_increment,
-	firstname varchar(128) not null,
-	lastname varchar(128) not null,
-	email varchar(255) not null,
-	username varchar(40) unique,
-	password varchar(40),
-	authenticationMethod varchar(40),
-	role varchar(30)
+-- @author Abhiroop Bhatnagar <bhatnagarabhiroop@gmail.com>
+CREATE TABLE `query_record` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `phone_number` varchar(20) NOT NULL,
+  `previous_sms_body` varchar(160),
+  `previous_sms_time` varchar(30) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `phone_number` (`phone_number`)
 );
