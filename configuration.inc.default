@@ -10,12 +10,14 @@ define('APPLICATION_NAME','application_name');
 define('APPLICATION_HOME','/var/www/sites/application_name');
 
 /**
- * The URL to get to this site
- * Do NOT use a trailing slash
+ * The URL to Service Discovery (XML) of the relevant Open311 Server
  */
-define('BASE_URL','http://localhost/application_name');
-define('BASE_URI','/application_name');
+define('SERVICE_DISCOVERY_URL','https://api.city.gov/discovery.xml');
 
+/**
+ * API Key of the relevant Open311 Server
+ */
+define('API_KEY','example_key');
 
 /**
  * Where on the filesystem the framework is installed.
@@ -28,7 +30,6 @@ define('FRAMEWORK',APPLICATION_HOME.'/libraries/framework');
  * http://framework.zend.com
  */
 define('ZEND',APPLICATION_HOME.'/libraries/ZendFramework/library');
-
 
 /**
  * Used when there's an error on the site.  The Framework will
@@ -78,49 +79,42 @@ define('DB_USER',APPLICATION_NAME);
 define('DB_PASS','password');
 
 /**
- * Directory Configuration
- *
- * This supports doing user authentication from multiple external
- * directories, such as LDAP or ADS. This is required since city staff
- * are in a seperate LDAP directory from public user accounts.
- * Classes that implement ExternalIdentity should have an entry here.
- *
- * See: ExternalIdentity
+ * Response to get_service_list
+ * GROUP    - Return List of Groups
+ * SERVICES - Return list of Services	 
  */
-// Example for ADS style authentication
-$DIRECTORY_CONFIG = array(
-//	'Employee'=>array(
-//		'DIRECTORY_SERVER'=>'ldaps://example.org:636',
-//		'DIRECTORY_BASE_DN'=>'OU=Department,DC=example,DC=org',
-//		'DIRECTORY_USERNAME_ATTRIBUTE'=>'CN',
-//		'DIRECTORY_USER_BINDING'=>'{username}@example.org',
-//		'DIRECTORY_ADMIN_BINDING'=>'admin@example.org',
-//		'DIRECTORY_ADMIN_PASS'=>'password'
-//	)
-);
-// Example for LDAP style authentication
-//$DIRECTORY_CONFIG = array(
-//	'Employee'=>array(
-//		'DIRECTORY_SERVER'=>'ldaps://example.org:636');
-//		'DIRECTORY_BASE_DN'=>'ou=people,o=ldap.domain.somewhere');
-//		'DIRECTORY_USERNAME_ATTRIBUTE'=>'uid');
-//		'DIRECTORY_USER_BINDING'=>'uid={username},'.DIRECTORY_BASE_DN);
-//		'DIRECTORY_ADMIN_BINDING'=>'uid=admin,'.DIRECTORY_BASE_DN);
-//		'DIRECTORY_ADMIN_PASS'=>'password');
-//	)
-//);
+define('GET_SERVICE_LIST_RESPONSE','GROUP');
+
+//-----------------------------------------------------------------------------------
+// SMS-forwarding client specific settings:
+// These will be provided by the service provider of your SMS-forwarding services.
+//-----------------------------------------------------------------------------------
+/**
+ * Response format required by the SMS client
+ * 
+ * Choose the format in which the SMS client requires the response
+ * HTML   - Response will be enclosed in <body> tags
+ * XML    - Response will be enclosed in <response> tags
+ * TWILIO - Response will be provided as per TwiML
+ *
+ */
+define('RESPONSE_FORMAT','HTML');
 
 /**
- * CAS authentication http://www.jasig.org/cas
- *
- * https://wiki.jasig.org/display/CASC/phpCAS
- *
- * phpCAS is a PHP library for handling the calls to the CAS service
- * It is the official library, part of the Jasig CAS project
+ * Request parameter corresponding to the Body of the SMS
  */
-//define('CAS','/var/www/libraries/phpCAS');
-//define('CAS_SERVER','cas.somewhere.org');
-//define('CAS_URI','cas');
+define('SMS_BODY','Body');
+
+/**
+ * Request parameter corresponding to phone number from which SMS was sent
+ */
+define('SMS_FROM','From');
+
+/**
+ * Request parameter corresponding to API key
+ */
+//define('SMS_API_KEY','api_key');
+
 
 //-------------------------------------------------------------------
 // Bootstrap code
