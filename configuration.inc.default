@@ -10,6 +10,13 @@ define('APPLICATION_NAME','application_name');
 define('APPLICATION_HOME','/var/www/sites/application_name');
 
 /**
+ * The URL to get to this site
+ * Do NOT use a trailing slash
+ */
+define('BASE_URL','http://localhost/open311-sms');
+define('BASE_URI','/open311-sms');
+
+/**
  * The URL to Service Discovery (XML) of the relevant Open311 Server
  */
 define('SERVICE_DISCOVERY_URL','https://api.city.gov/discovery.xml');
