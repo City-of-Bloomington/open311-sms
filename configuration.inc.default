@@ -24,7 +24,7 @@ define('SERVICE_DISCOVERY_URL','https://api.city.gov/discovery.xml');
 /**
  * API Key of the relevant Open311 Server
  */
-define('API_KEY','example_key');
+define('OPEN311_API_KEY','open311_api_key');
 
 /**
  * Where on the filesystem the framework is installed.
@@ -99,6 +99,9 @@ define('GET_SERVICE_LIST_RESPONSE','GROUP');
 
 /**
  * SMS Keyword
+ * All SMSs sent from user's phone will begin with this keyword. If your 
+ * SMS-forwarding client strips down the keyword from the SMS body before 
+ * sending it you, comment out the below line.
  */
 define('SMS_KEYWORD','keyword');
 
@@ -125,6 +128,11 @@ define('SMS_FROM','From');
 
 /**
  * Request parameter corresponding to API key
+ */
+//define('SMS_API_KEY_PARAM','api_key_param');
+
+/**
+ * API Key
  */
 //define('SMS_API_KEY','api_key');
 
