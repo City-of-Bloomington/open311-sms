@@ -16,7 +16,7 @@ class IncomingSMS
 		$this->smsFrom  = trim(self::fetchValuefromKey(SMS_FROM));
 		$this->smsBody  = trim(self::fetchValuefromKey(SMS_BODY));
 		$this->smsAPIKey= trim(self::fetchValuefromKey(SMS_API_KEY_PARAM));
-		$this->smsBodyPieces=explode(" ",$this->smsBody);
+		$this->smsBodyPieces=explode(" ",$this->smsBody,3);
 	}
 	
 	public function isAPIKeyValid()
@@ -86,10 +86,19 @@ class IncomingSMS
 	{
 		$potentialQueryTextIndex=2;
 		if(!defined('SMS_KEYWORD')) {-- $potentialQueryTextIndex; }
-		if(is_null(getSubKeyword())) {-- $potentialQueryTextIndex; }
-
+		if(is_null(self::getSubKeyword())) {-- $potentialQueryTextIndex; }
+		
+		/* 
+		 *All the pieces after Keyword and subKeyword are QueryText
+		 */	
 		$QueryTextIndex=$potentialQueryTextIndex;
-		return $this->smsBodyPieces[$QueryTextIndex];
+		$QueryText=$this->smsBodyPieces[$QueryTextIndex];
+		for($i=$QueryTextIndex+1;$i<=2;$i++)
+		{
+			$QueryText=$QueryText." ".$this->smsBodyPieces[$i];
+		}
+		
+		return $QueryText;
 	}
 	
 	private static function fetchValuefromKey($key)
