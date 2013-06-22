@@ -12,9 +12,9 @@ class Template extends View
 {
 	private $path;
 	private $filename;
-
 	public $outputFormat = 'html';
 	public $blocks   = array();
+	public $smsBlocks= array();
 	private $assets  = array();
 	private $helpers = array();
 
@@ -182,5 +182,17 @@ class Template extends View
 			$this->helpers[$functionName] = new $class();
 		}
 		return $this->helpers[$functionName];
+	}
+
+	private function includeSMSBlocks()
+	{
+		$outgoingSMS=$this->smsBlocks['head'];	
+		foreach($this->smsBlocks as $key=>$value)
+		{	
+			if(($key!='head')&&($key!='tail'))
+				$outgoingSMS=$outgoingSMS.$value;
+			return $outgoingSMS;	
+		}
+		
 	}
 }

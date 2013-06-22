@@ -50,7 +50,7 @@ class IncomingSMS
 		return TRUE;
 	}
 
-	public function getSubKeyword()
+	public function getInteractionMode()
 	{
 		$SubKeywordIndex=1;
 		
@@ -59,30 +59,18 @@ class IncomingSMS
 			--$SubKeywordIndex;
 		}
 
-		if (SUB_KEYWORD_GET_SERVICE_CODES==$this->smsBodyPieces[$SubKeywordIndex]) 
+		switch($this->smsBodyPieces[$SubKeywordIndex])
 		{
-			$subKeyword=SUB_KEYWORD_GET_SERVICE_CODES; 
-		}	
-		else if (SUB_KEYWORD_SUBMIT_REQUEST==$this->smsBodyPieces[$SubKeywordIndex]) 
-		{ 
-			$subKeyword=SUB_KEYWORD_SUBMIT_REQUEST; 
-		}	
-		else if (SUB_KEYWORD_CHECK_REQUEST_STATUS==$this->smsBodyPieces[$SubKeywordIndex])
-		{ 
-			$subKeyword=SUB_KEYWORD_CHECK_REQUEST_STATUS; 
-		}	
-		else if (SUB_KEYWORD_HELP==$this->smsBodyPieces[$SubKeywordIndex]) 
-		{ 
-			$subKeyword=SUB_KEYWORD_HELP; 
-		}	
-		else 
-		{ 
-			$subKeyword=NULL;	
+			case SUB_KEYWORD_GET_SERVICE_CODES   :{$interactionMode=1;break;}
+			case SUB_KEYWORD_SUBMIT_REQUEST      :{$interactionMode=2;break;}	
+			case SUB_KEYWORD_CHECK_REQUEST_STATUS:{$interactionMode=3;break;}	
+			case SUB_KEYWORD_HELP                :{$interactionMode=4;break;}	
+			default :{$interactionMode=0;}	
 		}
-		return $subKeyword;
+		return $interactionMode;
 	}
 
-	public function getQueryText()
+	public function getQueryText()	
 	{
 		$potentialQueryTextIndex=2;
 		if(!defined('SMS_KEYWORD')) {-- $potentialQueryTextIndex; }
