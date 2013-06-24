@@ -63,7 +63,7 @@ if (isset($resource) && isset($action) && $ZEND_ACL->has($resource)) {
 	if ($ZEND_ACL->isAllowed($USER_ROLE, $resource, $action)) {
 		$controller = ucfirst($resource).'Controller';		
 		$c = new $controller($template);
-		$c->$action($endpoint);
+		$c->$action();
 	}
 	else {
 		header('HTTP/1.1 403 Forbidden', true, 403);
