@@ -8,6 +8,6 @@ class InteractionMode0Controller extends Controller
 {
 	public function index()
 	{
-		$this->template->smsBlocks['head'] = GROUP_LIST_INFO_TEXT;
+		
 	}
 }

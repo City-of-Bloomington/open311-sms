@@ -191,8 +191,8 @@ class Template extends View
 		{	
 			if(($key!='head')&&($key!='tail'))
 				$outgoingSMS=$outgoingSMS.$value;
-			return $outgoingSMS;	
 		}
+		return trim($outgoingSMS.$this->smsBlocks['tail']);
 		
 	}
 }
