@@ -92,6 +92,10 @@ define('DB_PASS','password');
  */
 define('GET_SERVICE_LIST_RESPONSE','GROUP');
 
+/**
+ * Standard SMS character limit		 
+ */
+define('SMS_CHARACTER_LIMIT','160');
 //-----------------------------------------------------------------------------------
 // SMS-forwarding client specific settings:
 // These will be provided by the service provider of your SMS-forwarding services.
