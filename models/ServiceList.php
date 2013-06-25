@@ -8,7 +8,6 @@ class ServiceList
 {	
 	public static function getServiceList($xml,$group='All')
 	{
-		
 		foreach ($xml->service as $service) 
 		{
 			if(((string)$service->group==$group)||($group=='All'))
