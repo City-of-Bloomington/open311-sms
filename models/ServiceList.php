@@ -6,14 +6,16 @@
  */
 class ServiceList
 {	
-	public static function getServiceList($xml)
+	public static function getServiceList($xml,$group='All')
 	{
 		
 		foreach ($xml->service as $service) 
-		{	
-			$serviceCode=(int)$service->service_code;
-   			$serviceList[$serviceCode]=(string)$service->service_name;
-			
+		{
+			if(((string)$service->group==$group)||($group=='All'))
+			{	
+				$serviceCode=(int)$service->service_code;
+	   			$serviceList[$serviceCode]=(string)$service->service_name;
+			}
 		}
 		uasort($serviceList, 'self::cmp');
 		return $serviceList;

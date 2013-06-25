@@ -16,7 +16,7 @@ class InteractionMode1Controller extends Controller
 		parent::__construct($template);
 	}
 	
-	public function generateResponse($endpoint,$page=1,$type=GET_SERVICE_LIST_RESPONSE)
+	public function generateResponse($endpoint,$type=GET_SERVICE_LIST_RESPONSE,$page=1)
 	{	
 		$list=array();	
 		$xmlurl = file_get_contents($endpoint.'/services.xml');    
@@ -41,7 +41,7 @@ class InteractionMode1Controller extends Controller
 			//error
 		}
 	}
-	private static function constructPages(array $list,$type)
+	public static function constructPages(array $list,$type)
 	{
 		$prefix=($type=='SERVICES')?SERVICE_OPTIONS_PREFIX:GROUP_OPTIONS_PREFIX;
 		$pages=array();

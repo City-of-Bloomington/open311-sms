@@ -86,7 +86,7 @@ define('DB_USER',APPLICATION_NAME);
 define('DB_PASS','password');
 
 /**
- * Response to get_service_list
+ * Response to get_service_codes
  * GROUP    - Return List of Groups
  * SERVICES - Return list of Services	 
  */

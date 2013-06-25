@@ -15,14 +15,16 @@ class IncomingSMS
 	{
 		$this->smsFrom  = trim(self::fetchValuefromKey(SMS_FROM));
 		$this->smsBody  = trim(self::fetchValuefromKey(SMS_BODY));
-		$this->smsAPIKey= trim(self::fetchValuefromKey(SMS_API_KEY_PARAM));
+		$this->smsAPIKey= defined('SMS_API_KEY_PARAM')?trim(self::fetchValuefromKey(SMS_API_KEY_PARAM)):NULL;
 		$this->smsBodyPieces=explode(" ",$this->smsBody,3);
 	}
 	
 	public function isAPIKeyValid()
 	{
+		
 		if(isset($this->smsAPIKey))
 		{
+			
 			if(($this->smsAPIKey)==SMS_API_KEY)
 				return TRUE;
 			else
@@ -30,7 +32,7 @@ class IncomingSMS
 				throw new Exception('Invalid Key');
 			}
 		}
-		
+		return TRUE;
 	}
 	
 	public function isKeywordMatched()
@@ -99,11 +101,12 @@ class IncomingSMS
 		 *All the pieces after Keyword and subKeyword are QueryText
 		 */	
 		$QueryTextIndex=$potentialQueryTextIndex;
-		$QueryText=$this->smsBodyPieces[$QueryTextIndex];
-		for($i=$QueryTextIndex+1;$i<=2;$i++)
+		$QueryText=isset($this->smsBodyPieces[$QueryTextIndex])?$this->smsBodyPieces[$QueryTextIndex]:NULL;
+		foreach($this->smsBodyPieces as $key => $value)
 		{
-			$QueryText=$QueryText." ".$this->smsBodyPieces[$i];
-		}		
+			if($key>$QueryTextIndex)
+				$QueryText=$QueryText." ".$value;
+		}	
 		return $QueryText;
 	}
 	
