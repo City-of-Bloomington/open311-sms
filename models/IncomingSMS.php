@@ -70,11 +70,30 @@ class IncomingSMS
 		return $interactionMode;
 	}
 
+	public function getSubKeyword()
+	{
+		$SubKeywordIndex=1;		
+		if (!defined('SMS_KEYWORD'))
+		{
+			--$SubKeywordIndex;
+		}
+
+		switch($this->smsBodyPieces[$SubKeywordIndex])
+		{
+			case SUB_KEYWORD_GET_SERVICE_CODES   :{return SUB_KEYWORD_GET_SERVICE_CODES;}
+			case SUB_KEYWORD_SUBMIT_REQUEST      :{return SUB_KEYWORD_SUBMIT_REQUEST;}	
+			case SUB_KEYWORD_CHECK_REQUEST_STATUS:{return SUB_KEYWORD_CHECK_REQUEST_STATUS;}	
+			case SUB_KEYWORD_HELP                :{return SUB_KEYWORD_HELP;}
+			case SUB_KEYWORD_MORE                :{return SUB_KEYWORD_MORE;}
+			default 			     :{return NULL;}	
+		}
+	}
+
 	public function getQueryText()	
 	{
 		$potentialQueryTextIndex=2;
 		if(!defined('SMS_KEYWORD')) {-- $potentialQueryTextIndex; }
-		if(is_null(self::getSubKeyword())) {-- $potentialQueryTextIndex; }
+		if(is_null(self::getSubkeyword())) {-- $potentialQueryTextIndex; }
 		
 		/* 
 		 *All the pieces after Keyword and subKeyword are QueryText
@@ -84,8 +103,7 @@ class IncomingSMS
 		for($i=$QueryTextIndex+1;$i<=2;$i++)
 		{
 			$QueryText=$QueryText." ".$this->smsBodyPieces[$i];
-		}
-		
+		}		
 		return $QueryText;
 	}
 	
@@ -94,4 +112,10 @@ class IncomingSMS
 		$value=array_key_exists($key, $_REQUEST)?$_REQUEST[$key]:NULL;
 		return $value;
 	}
+
+	public function getFrom() 
+        { 
+		return $this->smsFrom;           
+	}
+	
 }
