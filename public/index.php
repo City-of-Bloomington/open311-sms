@@ -71,7 +71,7 @@ if (isset($resource) && isset($action) && $ZEND_ACL->has($resource)) {
 	}
 }
 // ACL not required if in SMS mode
-else if ($sms_mode)
+else if (($sms_mode)&&($xmlurl))
 {
 	$controller = ucfirst($resource).'Controller';
 	$c = new $controller($template);

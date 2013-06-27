@@ -43,6 +43,21 @@ class ServiceList
     		}
     		return (strlen($a) < strlen($b)) ? -1 : 1;
 	}
+	public static function isMetadataPresent($xml,$serviceCode)
+	{
+		foreach ($xml->service as $service) 
+		{
+			if((string)$service->service_code==$serviceCode)
+			{	
+				$metadata=(string)$service->metadata;
+			}
+		}
+		if($metadata=='true')
+			$metadataPresent=TRUE;
+		else
+			$metadataPresent=FALSE;
+		return $metadataPresent;
+	}
 		
 }
 

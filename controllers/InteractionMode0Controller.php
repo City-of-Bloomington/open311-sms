@@ -27,18 +27,11 @@ class InteractionMode0Controller extends Controller
 			$controller= new InteractionMode1Controller($this->template);
 			$controller->handleReplySMS($endpoint);
 		}
-		
+		if($previousQuery['interaction_mode']==2)
+		{
+			$controller= new InteractionMode2Controller($this->template);
+			$controller->handleReplySMS($endpoint);
+		}
 		
 	}
-	private static function findGroupNumber($string)
-	{
-		if(preg_match('/^'.GROUP_OPTIONS_PREFIX.'([0-9]*$)/', $string,$matches))
-		{
-			return $matches[1]; 
-		}
-		else
-		{
-			return 0;
-		}
-	}	
 }

@@ -27,6 +27,11 @@ define('SERVICE_DISCOVERY_URL','https://api.city.gov/discovery.xml');
 define('OPEN311_API_KEY','open311_api_key');
 
 /**
+ * Jurisdiction Id of the relevant Open311 Server
+ */
+define('OPEN311_JURISDICTION_ID','api.city.gov');
+
+/**
  * Where on the filesystem the framework is installed.
  */
 define('FRAMEWORK',APPLICATION_HOME.'/libraries/framework');

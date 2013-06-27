@@ -7,8 +7,7 @@ CREATE TABLE `query_record` (
   `phone_number` varchar(20) NOT NULL,
   `interaction_mode` int(2) NOT NULL,
   `previous_page` int(2) NOT NULL,
-  `additional_info` varchar(255) DEFAULT NULL,
+  `additional_info` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `phone_number` (`phone_number`)
-);
-
+) 

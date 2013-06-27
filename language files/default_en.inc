@@ -14,18 +14,20 @@ define('SERVICE_LIST_INFO_TEXT_2','Reply \''.SMS_KEYWORD.' '.SUB_KEYWORD_MORE.'\
 define('SUCCESSFUL_REQUEST_SUBMISSION_TEXT','Your request has been successfully registered. Your service request id is:');
 define('UNSUCCESSFUL_REQUEST_SUBMISSION_TEXT','Your request was not registered. Please Retry');
 define('STRING_DATATYPE_RESPONSE_TEXT_1','Additional info required:');
-define('STRING_DATATYPE_RESPONSE_TEXT_2','Reply \''.SMS_KEYWORD.'&lt;space&lt;(your answer)\'');
+define('STRING_DATATYPE_RESPONSE_TEXT_2',';Reply \''.SMS_KEYWORD.'&lt;space&gt;(your answer)\'');
 define('NUMBER_DATATYPE_RESPONSE_TEXT_1','Additional info required:');
-define('NUMBER_DATATYPE_RESPONSE_TEXT_2','Reply \''.SMS_KEYWORD.'&lt;space&lt;(your answer)\'');
+define('NUMBER_DATATYPE_RESPONSE_TEXT_2',';Reply \''.SMS_KEYWORD.'&lt;space&gt;(your answer)\'');
 define('DATETIME_DATATYPE_RESPONSE_TEXT_1','Additional info required:');
-define('DATETIME_DATATYPE_RESPONSE_TEXT_2','Reply \''.SMS_KEYWORD.'&lt;space&lt;(your answer)\'');
+define('DATETIME_DATATYPE_RESPONSE_TEXT_2',';Reply \''.SMS_KEYWORD.'&lt;space&gt;(your answer)\'');`
 define('TEXT_DATATYPE_RESPONSE_TEXT_1','Additional info required:');
-define('TEXT_DATATYPE_RESPONSE_TEXT_2','Reply \''.SMS_KEYWORD.'&lt;space&lt;(your answer)\'');
+define('TEXT_DATATYPE_RESPONSE_TEXT_2',':Reply \''.SMS_KEYWORD.'&lt;space&gt;(your answer)\'');
 define('SINGLEVALUELIST_DATATYPE_RESPONSE_TEXT_1','Additional info required:');
-define('SINGLEVALUELIST_DATATYPE_RESPONSE_TEXT_2','Reply \''.SMS_KEYWORD.'&lt;space&lt;option code;Options:\'');
+define('SINGLEVALUELIST_DATATYPE_RESPONSE_TEXT_2',';Reply \''.SMS_KEYWORD.'&lt;space&gt;option code\';Options:');
+define('SINGLEVALUELIST_OPTIONS_PREFIX','i');
 define('MULTIVALUELIST_DATATYPE_RESPONSE_TEXT_1','Additional info required:');
-define('MULTIVALUELIST_DATATYPE_RESPONSE_TEXT_2','Reply \''.SMS_KEYWORD.'&lt;space&lt;option code;Options:\'');
+define('MULTIVALUELIST_DATATYPE_RESPONSE_TEXT_2',';Reply \''.SMS_KEYWORD.'&lt;space&gt;option code\';Options:');
+define('MULTIVALUELIST_OPTIONS_PREFIX','m');
 define('REQUEST_STATUS_RESPONSE_TEXT_1','Request Status:');
 define('REQUEST_STATUS_RESPONSE_TEXT_2','Info:');
-define('HELP_RESPONSE_TEXT','Reply with \''.SMS_KEYWORD.'&lt;space&lt;option code\' get more details;Options:');
+define('HELP_RESPONSE_TEXT','Reply with \''.SMS_KEYWORD.'&lt;space&gt;option code\' get more details;Options:');
 ?>

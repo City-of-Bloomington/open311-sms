@@ -16,7 +16,7 @@ class IncomingSMS
 		$this->smsFrom  = trim(self::fetchValuefromKey(SMS_FROM));
 		$this->smsBody  = trim(self::fetchValuefromKey(SMS_BODY));
 		$this->smsAPIKey= defined('SMS_API_KEY_PARAM')?trim(self::fetchValuefromKey(SMS_API_KEY_PARAM)):NULL;
-		$this->smsBodyPieces=explode(" ",$this->smsBody,3);
+		$this->smsBodyPieces=explode(" ",$this->smsBody,4);
 	}
 	
 	public function isAPIKeyValid()
@@ -54,14 +54,13 @@ class IncomingSMS
 
 	public function getInteractionMode()
 	{
-		$SubKeywordIndex=1;
+		$subKeywordIndex=1;
 		
 		if (!defined('SMS_KEYWORD'))
 		{
-			--$SubKeywordIndex;
+			--$subKeywordIndex;
 		}
-
-		switch($this->smsBodyPieces[$SubKeywordIndex])
+		switch($this->smsBodyPieces[$subKeywordIndex])
 		{
 			case SUB_KEYWORD_GET_SERVICE_CODES   :{$interactionMode=1;break;}
 			case SUB_KEYWORD_SUBMIT_REQUEST      :{$interactionMode=2;break;}	
@@ -90,24 +89,37 @@ class IncomingSMS
 			default 			     :{return NULL;}	
 		}
 	}
-
+	
+	public function getServiceCode()	
+	{
+		$serviceCodeIndex=2;
+		if(!defined('SMS_KEYWORD')) {-- $serviceCodeIndex; }
+		if(is_null(self::getSubkeyword())) {-- $serviceCodeIndex; }
+		if(preg_match('/^'.SERVICE_OPTIONS_PREFIX.'[0-9]*$/',$this->smsBodyPieces[$serviceCodeIndex],$matches))	
+		{
+			return $this->smsBodyPieces[$serviceCodeIndex];
+		}
+		else	
+		{
+			return NULL;
+		}
+	}
 	public function getQueryText()	
 	{
-		$potentialQueryTextIndex=2;
-		if(!defined('SMS_KEYWORD')) {-- $potentialQueryTextIndex; }
-		if(is_null(self::getSubkeyword())) {-- $potentialQueryTextIndex; }
-		
+		$queryTextIndex=3;
+		if(!defined('SMS_KEYWORD')) {-- $queryTextIndex; }
+		if(is_null(self::getSubkeyword())) {-- $queryTextIndex; }
+		if(is_null(self::getServiceCode())) {-- $queryTextIndex; }		
 		/* 
 		 *All the pieces after Keyword and subKeyword are QueryText
 		 */	
-		$QueryTextIndex=$potentialQueryTextIndex;
-		$QueryText=isset($this->smsBodyPieces[$QueryTextIndex])?$this->smsBodyPieces[$QueryTextIndex]:NULL;
+		$queryText=isset($this->smsBodyPieces[$queryTextIndex])?$this->smsBodyPieces[$queryTextIndex]:NULL;
 		foreach($this->smsBodyPieces as $key => $value)
 		{
-			if($key>$QueryTextIndex)
-				$QueryText=$QueryText." ".$value;
+			if($key>$queryTextIndex)
+				$queryText=$queryText." ".$value;
 		}	
-		return $QueryText;
+		return $queryText;
 	}
 	
 	private static function fetchValuefromKey($key)
@@ -120,5 +132,6 @@ class IncomingSMS
         { 
 		return $this->smsFrom;           
 	}
+	
 	
 }
