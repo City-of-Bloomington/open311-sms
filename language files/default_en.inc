@@ -18,7 +18,7 @@ define('STRING_DATATYPE_RESPONSE_TEXT_2',';Reply \''.SMS_KEYWORD.'&lt;space&gt;(
 define('NUMBER_DATATYPE_RESPONSE_TEXT_1','Additional info required:');
 define('NUMBER_DATATYPE_RESPONSE_TEXT_2',';Reply \''.SMS_KEYWORD.'&lt;space&gt;(your answer)\'');
 define('DATETIME_DATATYPE_RESPONSE_TEXT_1','Additional info required:');
-define('DATETIME_DATATYPE_RESPONSE_TEXT_2',';Reply \''.SMS_KEYWORD.'&lt;space&gt;(your answer)\'');`
+define('DATETIME_DATATYPE_RESPONSE_TEXT_2',';Reply \''.SMS_KEYWORD.'&lt;space&gt;(your answer)\'');
 define('TEXT_DATATYPE_RESPONSE_TEXT_1','Additional info required:');
 define('TEXT_DATATYPE_RESPONSE_TEXT_2',':Reply \''.SMS_KEYWORD.'&lt;space&gt;(your answer)\'');
 define('SINGLEVALUELIST_DATATYPE_RESPONSE_TEXT_1','Additional info required:');
@@ -30,4 +30,6 @@ define('MULTIVALUELIST_OPTIONS_PREFIX','m');
 define('REQUEST_STATUS_RESPONSE_TEXT_1','Request Status:');
 define('REQUEST_STATUS_RESPONSE_TEXT_2','Info:');
 define('HELP_RESPONSE_TEXT','Reply with \''.SMS_KEYWORD.'&lt;space&gt;option code\' get more details;Options:');
+define('MORE_OPTIONS_TEXT','Reply \''.SMS_KEYWORD.' '.SUB_KEYWORD_MORE.'\' to get more options');
+define('OPTIONS_TEXT','Options:');
 ?>

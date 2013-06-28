@@ -29,22 +29,25 @@ class InteractionMode2Controller extends Controller
 		$list=ServiceList::getServiceList($xmlServiceList);
 		$serviceNumber=self::findServiceNumber($serviceCode);
 		
-		if(!($list[$serviceNumber]))
+		if(!isset($list[$serviceNumber]))
 		{	
-			//return error 
+			echo 'error';
 		}
 		$fields=array();
 		$fields['service_code']=$serviceNumber;
 		$fields['address_string']=$incomingSMS->getQueryText();
 		$fields['phone']=$incomingSMS->getFrom();
+				
 		if(ServiceList::isMetadataPresent($xmlServiceList,$serviceNumber))
 		{
 			$xmlurlServiceDefinition = file_get_contents($endpoint.'/services/'.$serviceNumber.'.xml');    
 			$xmlServiceDefinition = simplexml_load_string($xmlurlServiceDefinition, null, LIBXML_NOCDATA);
 			$attributeList=self::getAttributeList($xmlServiceDefinition);
 			$fieldString=self::constructFieldString($fields);
-			QueryRecord::save(2,1,$fieldString);
-			$responseSMS=self::generateMetadataResponse($attributeList,1);
+			$page='attribute1 page1';
+			QueryRecord::save(2,$page,$fieldString);
+			$metadataResponse=self::generateMetadataResponse($attributeList,1);
+			$responseSMS=$metadataResponse['page1'];			
 		}
 		else
 		{	
@@ -59,7 +62,9 @@ class InteractionMode2Controller extends Controller
 			{
 				//error
 			}
-			QueryRecord::save(2,1,$responseSMS[1]);
+			$page='attribute0 page1';
+			QueryRecord::save(2,$page,$responseSMS[1]);
+			
 			
 		}
 		$this->template->smsBlocks=$responseSMS;
@@ -70,7 +75,8 @@ class InteractionMode2Controller extends Controller
 		$previousQuery=QueryRecord::getRecord($incomingSMS->getFrom());
 		preg_match('/service_code=([0-9]*)/',$previousQuery['additional_info'],$matches);
 		$serviceNumber=$matches[1];
-		$incomingAttributeOrder=$previousQuery['previous_page']; //Order of Attribute whose response is in Incoming SMS
+		preg_match('/^attribute([0-9]*) page([0-9]*)$/',$previousQuery['previous_page'],$matches);
+		$incomingAttributeOrder=$matches[1]; //Order of Attribute whose response is in Incoming SMS			
 		$xmlurlServiceDefinition = file_get_contents($endpoint.'/services/'.$serviceNumber.'.xml');    
 		$xmlServiceDefinition = simplexml_load_string($xmlurlServiceDefinition, null, LIBXML_NOCDATA);
 		$attributeList=self::getAttributeList($xmlServiceDefinition);
@@ -79,47 +85,62 @@ class InteractionMode2Controller extends Controller
 		$fieldString=$previousQuery['additional_info'];
 		$fields=array();
 		
-		if($attributeList[$incomingAttributeOrder]['datatype']=='singlevaluelist')
-		{
-			$attributeValueSMSCode=$incomingSMS->getQueryText();
-			if(preg_match('/^'.SINGLEVALUELIST_OPTIONS_PREFIX.'([0-9]*)$/',$attributeValueSMSCode,$matches))
-				$attributeValueNumber=$matches[1];
-			else
+		if($incomingSMS->getSubKeyword()!=SUB_KEYWORD_MORE)
+		{	
+			// The user has chosen value for an attribute 
+			// We should now construct $fieldString based on datatype
+			
+			
+			if($attributeList[$incomingAttributeOrder]['datatype']=='singlevaluelist')
 			{
-				//error
-			}	
-			$attributeKeyChosen=self::findAttributeKeyChosen($attributeList[$incomingAttributeOrder],$attributeValueNumber);
-			$fields['attribute['.$attributeCode.']']=$attributeKeyChosen;
-			$fieldString=self::constructFieldString($fields,$fieldString);
-		}
-		else if($attributeList[$incomingAttributeOrder]['datatype']=='multivaluelist')
-		{
-			$attributeValueSMSCodes=$incomingSMS->getQueryText();
-			if(preg_match_all('/'.MULTIVALUELIST_OPTIONS_PREFIX.'([0-9]*)/',$attributeValueSMSCodes,$matches))
+				$attributeValueSMSCode=$incomingSMS->getQueryText();
+				if(preg_match('/^'.SINGLEVALUELIST_OPTIONS_PREFIX.'([0-9]*)$/',$attributeValueSMSCode,$matches))
+					$attributeValueNumber=$matches[1];
+				else
+				{
+					//error
+				}	
+				$attributeKeyChosen=self::findAttributeKeyChosen($attributeList[$incomingAttributeOrder],$attributeValueNumber);
+				$fields['attribute['.$attributeCode.']']=$attributeKeyChosen;
+				$fieldString=self::constructFieldString($fields,$fieldString);
+			}
+			else if($attributeList[$incomingAttributeOrder]['datatype']=='multivaluelist')
 			{
-				$attributeValueNumbers=array();				
-				$attributeValueNumbers=$matches[1];
+				$attributeValueSMSCodes=$incomingSMS->getQueryText();
+				if(preg_match_all('/'.MULTIVALUELIST_OPTIONS_PREFIX.'([0-9]*)/',$attributeValueSMSCodes,$matches))
+				{
+					$attributeValueNumbers=array();				
+					$attributeValueNumbers=$matches[1];
+				}
+				else
+				{
+					//error
+				}	
+				foreach($attributeValueNumbers as $attributeValueNumber)
+				{
+					$attributeKeyChosen=self::findAttributeKeyChosen($attributeList[$incomingAttributeOrder],$attributeValueNumber);
+					$fields['attribute['.$attributeCode.'][]']=$attributeKeyChosen;
+					$fieldString=self::constructFieldString($fields,$fieldString);
+				}
 			}
 			else
 			{
-				//error
-			}	
-			foreach($attributeValueNumbers as $attributeValueNumber)
-			{
-				$attributeKeyChosen=self::findAttributeKeyChosen($attributeList[$incomingAttributeOrder],$attributeValueNumber);
-				$fields['attribute['.$attributeCode.'][]']=$attributeKeyChosen;
+				$fields['attribute['.$attributeCode.']']=$incomingSMS->getQueryText();
 				$fieldString=self::constructFieldString($fields,$fieldString);
 			}
 		}
-		else
-		{
-			$fields['attribute['.$attributeCode.']']=$incomingSMS->getQueryText();
-			$fieldString=self::constructFieldString($fields,$fieldString);
-		}
-		
-		QueryRecord::save(2,($incomingAttributeOrder+1),$fieldString);	
 
-		if(($incomingAttributeOrder+1)>count($attributeList))
+		
+		if($incomingSMS->getSubKeyword()==SUB_KEYWORD_MORE)
+		{
+			$previousPage=$matches[2];			
+			$metadataResponse=self::generateMetadataResponse($attributeList,$incomingAttributeOrder);
+			$pageNumber=$previousPage+1;	
+			$nextAttributeNumber=$incomingAttributeOrder;		
+			$responseSMS=$metadataResponse['page'.$pageNumber];
+			$page='attribute'.$nextAttributeNumber.' page'.$pageNumber;
+		}
+		else if(($incomingAttributeOrder+1)>count($attributeList))
 		{
 			//No more attributes. We should post the query
 			
@@ -129,20 +150,25 @@ class InteractionMode2Controller extends Controller
 				$xmlServiceRequest = simplexml_load_string($serverResponse);
 				$responseSMS['head']=SUCCESSFUL_REQUEST_SUBMISSION_TEXT;
 				$responseSMS[1]=(string)$xmlServiceRequest->request->service_request_id;
+				$page='Request Successfully Submitted';				
 			}
 			else
 			{
 				//error
-			}
-			
+			}	
+					
 		}
 		else
 		{
-			//Response SMS will ask for information about next Attribute
-			
-			$responseSMS=self::generateMetadataResponse($attributeList,($incomingAttributeOrder+1));
-			
+			//Response SMS will ask for information about next Attribute			
+			$metadataResponse=self::generateMetadataResponse($attributeList,($incomingAttributeOrder+1));
+			$responseSMS=$metadataResponse['page1'];
+			$nextAttributeNumber=$incomingAttributeOrder+1;
+			$pageNumber=1;			
+			$page='attribute'.$nextAttributeNumber.' page'.$pageNumber;
 		}
+		
+		QueryRecord::save(2,$page,$fieldString);
 		$this->template->smsBlocks=$responseSMS;
 	}
 	public function postRequest($endpoint,array $fields=NULL,$fieldString=NULL)
@@ -228,27 +254,44 @@ class InteractionMode2Controller extends Controller
 	}
 	private static function generateMetadataResponse($attributeList,$attributeNumber)
 	{	
-		$metadataResponse=array();
+		$pages=array();
 		$attributeProperties=$attributeList[$attributeNumber];
 		$datatype=strtoupper($attributeProperties['datatype']);
-
-		$metadataResponse['head']=constant($datatype.'_DATATYPE_RESPONSE_TEXT_1');
-		$metadataResponse['head'].=$attributeProperties['description'];
-		$metadataResponse['head'].=constant($datatype.'_DATATYPE_RESPONSE_TEXT_2');
-		switch($attributeProperties['datatype'])
+			
+		$pages['page1']['head']=constant($datatype.'_DATATYPE_RESPONSE_TEXT_1');
+		$pages['page1']['head'].=$attributeProperties['description'];
+		$pages['page1']['head'].=constant($datatype.'_DATATYPE_RESPONSE_TEXT_2');
+		$pages['page1']['tail'] = MORE_OPTIONS_TEXT;
+		$characterCount=strlen(html_entity_decode($pages['page1']['head']))+
+					strlen(html_entity_decode($pages['page1']['tail']));
+		
+		$pageNumber=1;
+		
+		if(($attributeProperties['datatype']=='singlevaluelist')||($attributeProperties['datatype']=='multivaluelist'))
 		{
-			case 'singlevaluelist':
-			case 'multivaluelist':
+			$j=1;
+			$i=1;
+			foreach($attributeProperties['values'] as $key => $value)
 			{
-				$i=1;
-				foreach($attributeProperties['values'] as $key => $value)
+				$smsBlock=constant($datatype.'_OPTIONS_PREFIX').$j.'-'.$value.';';
+				$characterCount=$characterCount+strlen(html_entity_decode($smsBlock));
+				if($characterCount>=(int)SMS_CHARACTER_LIMIT)
 				{
-					$metadataResponse[$i]=constant($datatype.'_OPTIONS_PREFIX').$i.'-'.$value.';';
-					++$i;
+					$pageNumber++;
+					$pages['page'.$pageNumber]=array();
+					$pages['page'.$pageNumber]['head'] = OPTIONS_TEXT;
+					$pages['page'.$pageNumber]['tail'] = MORE_OPTIONS_TEXT;
+					$characterCount=strlen(html_entity_decode($pages['page'.$pageNumber]['head']))
+								+strlen(html_entity_decode($pages['page'.$pageNumber]['tail']));
+					$characterCount=$characterCount+strlen(html_entity_decode($smsBlock));
+					$i=1;	
 				}
+				$pages['page'.$pageNumber][++$i] = $smsBlock;  
+				++$j;
 			}
 		}
-		return $metadataResponse;
+		$pages['page'.$pageNumber]['tail']='';	
+		return $pages;
 	}
 	private static function findAttributeKeyChosen($attributeProperties,$attributeValueNumber)
 	{
@@ -264,4 +307,5 @@ class InteractionMode2Controller extends Controller
 		}
 		return $attributeKeyChosen;		
 	}
+	
 }
