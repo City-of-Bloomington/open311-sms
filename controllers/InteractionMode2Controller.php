@@ -46,7 +46,7 @@ class InteractionMode2Controller extends Controller
 			$fieldString=self::constructFieldString($fields);
 			$page='attribute1 page1';
 			QueryRecord::save(2,$page,$fieldString);
-			$metadataResponse=self::generateMetadataResponse($attributeList,1);
+			$metadataResponse=SMSPages::generateMetadataResponse($attributeList,1);
 			$responseSMS=$metadataResponse['page1'];			
 		}
 		else
@@ -63,9 +63,7 @@ class InteractionMode2Controller extends Controller
 				//error
 			}
 			$page='attribute0 page1';
-			QueryRecord::save(2,$page,$responseSMS[1]);
-			
-			
+			QueryRecord::save(2,$page,$responseSMS[1]);			
 		}
 		$this->template->smsBlocks=$responseSMS;
 	}
@@ -88,8 +86,7 @@ class InteractionMode2Controller extends Controller
 		if($incomingSMS->getSubKeyword()!=SUB_KEYWORD_MORE)
 		{	
 			// The user has chosen value for an attribute 
-			// We should now construct $fieldString based on datatype
-			
+			// We should now construct $fieldString based on datatype			
 			
 			if($attributeList[$incomingAttributeOrder]['datatype']=='singlevaluelist')
 			{
@@ -128,13 +125,11 @@ class InteractionMode2Controller extends Controller
 				$fields['attribute['.$attributeCode.']']=$incomingSMS->getQueryText();
 				$fieldString=self::constructFieldString($fields,$fieldString);
 			}
-		}
-
-		
+		}		
 		if($incomingSMS->getSubKeyword()==SUB_KEYWORD_MORE)
 		{
 			$previousPage=$matches[2];			
-			$metadataResponse=self::generateMetadataResponse($attributeList,$incomingAttributeOrder);
+			$metadataResponse=SMSPages::generateMetadataResponse($attributeList,$incomingAttributeOrder);
 			$pageNumber=$previousPage+1;	
 			$nextAttributeNumber=$incomingAttributeOrder;		
 			$responseSMS=$metadataResponse['page'.$pageNumber];
@@ -155,19 +150,17 @@ class InteractionMode2Controller extends Controller
 			else
 			{
 				//error
-			}	
-					
+			}					
 		}
 		else
 		{
 			//Response SMS will ask for information about next Attribute			
-			$metadataResponse=self::generateMetadataResponse($attributeList,($incomingAttributeOrder+1));
+			$metadataResponse=SMSPages::generateMetadataResponse($attributeList,($incomingAttributeOrder+1));
 			$responseSMS=$metadataResponse['page1'];
 			$nextAttributeNumber=$incomingAttributeOrder+1;
 			$pageNumber=1;			
 			$page='attribute'.$nextAttributeNumber.' page'.$pageNumber;
-		}
-		
+		}		
 		QueryRecord::save(2,$page,$fieldString);
 		$this->template->smsBlocks=$responseSMS;
 	}
@@ -252,47 +245,6 @@ class InteractionMode2Controller extends Controller
 		$fieldString=rtrim($fieldString, '&');
 		return $fieldString;
 	}
-	private static function generateMetadataResponse($attributeList,$attributeNumber)
-	{	
-		$pages=array();
-		$attributeProperties=$attributeList[$attributeNumber];
-		$datatype=strtoupper($attributeProperties['datatype']);
-			
-		$pages['page1']['head']=constant($datatype.'_DATATYPE_RESPONSE_TEXT_1');
-		$pages['page1']['head'].=$attributeProperties['description'];
-		$pages['page1']['head'].=constant($datatype.'_DATATYPE_RESPONSE_TEXT_2');
-		$pages['page1']['tail'] = MORE_OPTIONS_TEXT;
-		$characterCount=strlen(html_entity_decode($pages['page1']['head']))+
-					strlen(html_entity_decode($pages['page1']['tail']));
-		
-		$pageNumber=1;
-		
-		if(($attributeProperties['datatype']=='singlevaluelist')||($attributeProperties['datatype']=='multivaluelist'))
-		{
-			$j=1;
-			$i=1;
-			foreach($attributeProperties['values'] as $key => $value)
-			{
-				$smsBlock=constant($datatype.'_OPTIONS_PREFIX').$j.'-'.$value.';';
-				$characterCount=$characterCount+strlen(html_entity_decode($smsBlock));
-				if($characterCount>=(int)SMS_CHARACTER_LIMIT)
-				{
-					$pageNumber++;
-					$pages['page'.$pageNumber]=array();
-					$pages['page'.$pageNumber]['head'] = OPTIONS_TEXT;
-					$pages['page'.$pageNumber]['tail'] = MORE_OPTIONS_TEXT;
-					$characterCount=strlen(html_entity_decode($pages['page'.$pageNumber]['head']))
-								+strlen(html_entity_decode($pages['page'.$pageNumber]['tail']));
-					$characterCount=$characterCount+strlen(html_entity_decode($smsBlock));
-					$i=1;	
-				}
-				$pages['page'.$pageNumber][++$i] = $smsBlock;  
-				++$j;
-			}
-		}
-		$pages['page'.$pageNumber]['tail']='';	
-		return $pages;
-	}
 	private static function findAttributeKeyChosen($attributeProperties,$attributeValueNumber)
 	{
 		$i=1;
@@ -306,6 +258,5 @@ class InteractionMode2Controller extends Controller
 			++$i;
 		}
 		return $attributeKeyChosen;		
-	}
-	
+	}	
 }

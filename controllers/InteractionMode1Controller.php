@@ -41,7 +41,7 @@ class InteractionMode1Controller extends Controller
 			$listType='SERVICES';
 		}
 		
-		$pages=self::constructPages($list,$listType);
+		$pages=SMSPages::constructPages($list,$listType);
 		if($page<=count($pages))
 		{	
 			QueryRecord::save(1,$page,$type);
@@ -91,50 +91,7 @@ class InteractionMode1Controller extends Controller
 			}
 		}
 			
-	}
-	public static function constructPages(array $list,$type)
-	{
-		$prefix=($type=='SERVICES')?SERVICE_OPTIONS_PREFIX:GROUP_OPTIONS_PREFIX;
-		$pages=array();
-		$pages['page1']=array();
-		$pages['page1']['head'] = ($type=='SERVICES')?SERVICE_LIST_INFO_TEXT_1:GROUP_LIST_INFO_TEXT_1;
-		$pages['page1']['tail'] = ($type=='SERVICES')?SERVICE_LIST_INFO_TEXT_2:GROUP_LIST_INFO_TEXT_2;
-		$characterCount=strlen(html_entity_decode($pages['page1']['head']))+
-					strlen(html_entity_decode($pages['page1']['tail']));
-		$i=1;
-		$pageNumber=1;	
-		foreach($list as $key=>$value)
-		{
-			$smsBlock=$prefix.$key.'-'.$value.';';
-			$characterCount=$characterCount+strlen(html_entity_decode($smsBlock));
-			
-			if($characterCount>=(int)SMS_CHARACTER_LIMIT)
-			{
-				$pageNumber++;
-				$pages['page'.$pageNumber]=array();
-				$pages['page'.$pageNumber]['head'] = ($type=='SERVICES')?SERVICE_LIST_INFO_TEXT_1:GROUP_LIST_INFO_TEXT_3;
-				$pages['page'.$pageNumber]['tail'] = ($type=='SERVICES')?SERVICE_LIST_INFO_TEXT_2:GROUP_LIST_INFO_TEXT_2;
-				$characterCount=strlen(html_entity_decode($pages['page'.$pageNumber]['head']))
-							+strlen(html_entity_decode($pages['page'.$pageNumber]['tail']));
-				$characterCount=$characterCount+strlen(html_entity_decode($smsBlock));
-				$i=1;	
-			}
-			
-			$pages['page'.$pageNumber][$i++] = $smsBlock;  
-		}
-		$pages['page'.$pageNumber]['tail']='';	
-		return $pages;
-	}
-	private static function findLastPage($pages)
-	{
-		$i=0;
-		
-		foreach($pages as $page)
-		{			
-			$i++;
-		}
-		return $i;
-	}
+	}	
 	private static function findGroupNumber($string)
 	{
 		if(preg_match('/^'.GROUP_OPTIONS_PREFIX.'([0-9]*$)/', $string,$matches))
