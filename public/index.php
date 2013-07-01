@@ -29,13 +29,26 @@ if(($resource=='index')&&($action=='index')&&isset($_REQUEST))
 	
 	/**
 	 * Sub-Keywords and corresponding Interaction Modes:
-	 * No Sub-Keyword Present 	   :$interactionMode=0	
 	 * SUB_KEYWORD_GET_SERVICE_CODES   :$interactionMode=1
 	 * SUB_KEYWORD_SUBMIT_REQUEST      :$interactionMode=2	
 	 * SUB_KEYWORD_CHECK_REQUEST_STATUS:$interactionMode=3
  	 * SUB_KEYWORD_HELP                :$interactionMode=4
 	 */
 	$interactionMode = $incomingSMS->getInteractionMode();
+	if(!isset($interactionMode))
+	{
+		$previousQuery=QueryRecord::getRecord($incomingSMS->getFrom());
+		if(!isset($previousQuery))
+		{
+			echo 'error';
+		}
+		$interactionMode=$previousQuery['interaction_mode'];
+		$action='handleReplySMS';		
+	}
+	else
+	{
+		$action='generateResponse';
+	}
 	$resource='InteractionMode'.$interactionMode;
 	
 	//Find endpoint from Service Discovery
@@ -75,7 +88,7 @@ else if (($sms_mode)&&($xmlurl))
 {
 	$controller = ucfirst($resource).'Controller';
 	$c = new $controller($template);
-	$c->generateResponse($endpointURL);
+	$c->$action($endpointURL);
 }
 else {
 	header('HTTP/1.1 404 Not Found', true, 404);

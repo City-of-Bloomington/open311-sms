@@ -46,7 +46,7 @@ class InteractionMode2Controller extends Controller
 			$fieldString=self::constructFieldString($fields);
 			$page='attribute1 page1';
 			QueryRecord::save(2,$page,$fieldString);
-			$metadataResponse=SMSPages::generateMetadataResponse($attributeList,1);
+			$metadataResponse=SMSPages::constructMetadataResponsePages($attributeList,1);
 			$responseSMS=$metadataResponse['page1'];			
 		}
 		else
@@ -129,7 +129,7 @@ class InteractionMode2Controller extends Controller
 		if($incomingSMS->getSubKeyword()==SUB_KEYWORD_MORE)
 		{
 			$previousPage=$matches[2];			
-			$metadataResponse=SMSPages::generateMetadataResponse($attributeList,$incomingAttributeOrder);
+			$metadataResponse=SMSPages::constructMetadataResponsePages($attributeList,$incomingAttributeOrder);
 			$pageNumber=$previousPage+1;	
 			$nextAttributeNumber=$incomingAttributeOrder;		
 			$responseSMS=$metadataResponse['page'.$pageNumber];
@@ -155,7 +155,7 @@ class InteractionMode2Controller extends Controller
 		else
 		{
 			//Response SMS will ask for information about next Attribute			
-			$metadataResponse=SMSPages::generateMetadataResponse($attributeList,($incomingAttributeOrder+1));
+			$metadataResponse=SMSPages::constructMetadataResponsePages($attributeList,($incomingAttributeOrder+1));
 			$responseSMS=$metadataResponse['page1'];
 			$nextAttributeNumber=$incomingAttributeOrder+1;
 			$pageNumber=1;			

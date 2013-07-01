@@ -6,7 +6,7 @@
  */
 class SMSPages
 {	
-	public static function constructPages(array $list,$type)
+	public static function constructServiceListPages(array $list,$type)
 	{
 		$prefix=($type=='SERVICES')?SERVICE_OPTIONS_PREFIX:GROUP_OPTIONS_PREFIX;
 		$pages=array();
@@ -20,8 +20,7 @@ class SMSPages
 		foreach($list as $key=>$value)
 		{
 			$smsBlock=$prefix.$key.'-'.$value.';';
-			$characterCount=$characterCount+strlen(html_entity_decode($smsBlock));
-			
+			$characterCount=$characterCount+strlen(html_entity_decode($smsBlock));			
 			if($characterCount>=(int)SMS_CHARACTER_LIMIT)
 			{
 				$pageNumber++;
@@ -36,13 +35,11 @@ class SMSPages
 			
 			$pages['page'.$pageNumber][$i++] = $smsBlock;  
 		}
-		$pages=self::removeIfLastPageNotRequired($pages,$pageNumber,$characterCount);
+		self::removeIfLastPageNotRequired($pages,$pageNumber,$characterCount);
 		$pages['page'.$pageNumber]['tail']='';	
 		return $pages;
-	}
-
-	
-	public static function generateMetadataResponse($attributeList,$attributeNumber)
+	}	
+	public static function constructMetadataResponsePages($attributeList,$attributeNumber)
 	{	
 		$pages=array();
 		$attributeProperties=$attributeList[$attributeNumber];
@@ -81,6 +78,39 @@ class SMSPages
 			self::removeIfLastPageNotRequired($pages,$pageNumber,$characterCount);			
 		}
 		$pages['page'.$pageNumber]['tail']='';	
+		return $pages;
+	}
+	public static function returnHelpPages($interactionMode,$pageNumber)
+	{
+		$helpPages=array(
+				1=>array(),
+				2=>array(),
+				3=>array() );
+		//helpPages description: helpPages[InteractionMode][PageNumber]
+
+		if(GET_SERVICE_LIST_RESPONSE=='GROUPS')
+		{
+			$helpPages[1]=self::gatherHelpPages($helpPages[1],'HELP_GET_SERVICE_CODES_GROUPS_PAGE_');
+		}
+		else
+		{
+			$helpPages[1]=self::gatherHelpPages($helpPages[1],'HELP_GET_SERVICE_CODES_SERVICES_PAGE_');
+		}
+		
+		$helpPages[2]=self::gatherHelpPages($helpPages[2],'HELP_SUBMIT_REQUEST_PAGE_');
+		$helpPages[3]=self::gatherHelpPages($helpPages[3],'HELP_CHECK_REQUEST_STATUS_PAGE_');
+		
+		return $helpPages[$interactionMode][$pageNumber];
+	}
+	private static function gatherHelpPages($pages,$languageConstant)
+	{	
+		$pages=array();
+		$i=1;
+		while(defined($languageConstant.$i))
+		{
+			$pages[$i]=constant($languageConstant.$i);
+			$i++;
+		}
 		return $pages;
 	}
 	private static function removeIfLastPageNotRequired(&$pages,&$lastPage,$characterCountLastPage)

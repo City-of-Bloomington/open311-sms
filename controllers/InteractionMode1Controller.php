@@ -41,7 +41,7 @@ class InteractionMode1Controller extends Controller
 			$listType='SERVICES';
 		}
 		
-		$pages=SMSPages::constructPages($list,$listType);
+		$pages=SMSPages::constructServiceListPages($list,$listType);
 		if($page<=count($pages))
 		{	
 			QueryRecord::save(1,$page,$type);

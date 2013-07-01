@@ -66,7 +66,7 @@ class IncomingSMS
 			case SUB_KEYWORD_SUBMIT_REQUEST      :{$interactionMode=2;break;}	
 			case SUB_KEYWORD_CHECK_REQUEST_STATUS:{$interactionMode=3;break;}	
 			case SUB_KEYWORD_HELP                :{$interactionMode=4;break;}	
-			default :{$interactionMode=0;}	
+			default :{$interactionMode=NULL;}	
 		}
 		return $interactionMode;
 	}
