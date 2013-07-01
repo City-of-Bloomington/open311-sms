@@ -6,7 +6,7 @@ CREATE TABLE `query_record` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `phone_number` varchar(20) NOT NULL,
   `interaction_mode` int(2) NOT NULL,
-  `previous_page` int(2) NOT NULL,
+  `previous_page` varchar(255) NOT NULL,
   `additional_info` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `phone_number` (`phone_number`)
