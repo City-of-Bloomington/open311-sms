@@ -118,12 +118,10 @@ define('SMS_KEYWORD','keyword');
  * Response format required by the SMS client
  * 
  * Choose the format in which the SMS client requires the response
- * HTML   - Response will be enclosed in <body> tags
- * XML    - Response will be enclosed in <response> tags
- * TWILIO - Response will be provided as per TwiML
- *
+ * html   - Response will be enclosed in <body> tags
+ * xml    - Response will be enclosed in <response> tags
  */
-define('RESPONSE_FORMAT','HTML');
+define('SMS_RESPONSE_FORMAT','html');
 
 /**
  * Request parameter corresponding to the Body of the SMS

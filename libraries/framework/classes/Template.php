@@ -186,14 +186,22 @@ class Template extends View
 
 	private function includeSMSBlocks()
 	{
-		$outgoingSMS=$this->smsBlocks['head'];	
-		foreach($this->smsBlocks as $key=>$value)
-		{	
-			if(($key!='head')&&($key!='tail'))
-				$outgoingSMS=$outgoingSMS.$value;
+		ob_start();
+		if(!isset($_SESSION['SMSErrorMessage']))
+		{
+			echo $this->smsBlocks['head'];	
+			foreach($this->smsBlocks as $key=>$value)
+			{	
+				if(($key!='head')&&($key!='tail'))
+					echo $value;
+			}
+			if(isset($this->smsBlocks['tail']))
+				echo $this->smsBlocks['tail'];
 		}
-		if(isset($this->smsBlocks['tail']))
-			$outgoingSMS=trim($outgoingSMS.$this->smsBlocks['tail']);
-		return $outgoingSMS;
+		else
+		{
+			echo $_SESSION['SMSErrorMessage'][0];
+		}
+		return ob_get_clean();
 	}
 }

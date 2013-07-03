@@ -20,8 +20,9 @@ $sms_mode=FALSE;
 if(($resource=='index')&&($action=='index')&&isset($_REQUEST))
 {
 	$sms_mode=TRUE;
-	$template = new Template('SMS');
+	$template = new Template('SMS',SMS_RESPONSE_FORMAT);
 	$incomingSMS=new IncomingSMS;
+	unset($_SESSION['SMSErrorMessage']);
 
 	// Check if incoming SMS is valid
 	$incomingSMS->isAPIKeyValid();
@@ -36,32 +37,37 @@ if(($resource=='index')&&($action=='index')&&isset($_REQUEST))
 	 */
 	$interactionMode = $incomingSMS->getInteractionMode();
 	if(!isset($interactionMode))
-	{
+	{	
+		//No interaction mode present. Checking whether incoming SMS is a reply SMS.
 		$previousQuery=QueryRecord::getRecord($incomingSMS->getFrom());
 		if(!isset($previousQuery))
 		{
-			echo 'error';
+			$_SESSION['SMSErrorMessage'][] = SMS_ERROR_INCORRECT_RESPONSE;
 		}
 		$interactionMode=$previousQuery['interaction_mode'];
 		$action='handleReplySMS';		
 	}
 	else
 	{
-		$action='generateResponse';
+		$action='generateFirstPageResponse';
 	}
-	$resource='InteractionMode'.$interactionMode;
+	if(isset($interactionMode))
+		$resource='InteractionMode'.$interactionMode;
 	
-	//Find endpoint from Service Discovery
-	$xmlurl = file_get_contents(SERVICE_DISCOVERY_URL);    
-	$xml = simplexml_load_string($xmlurl, null, LIBXML_NOCDATA);
-	foreach ($xml->endpoints->endpoint as $endpoint) 
+	$xmlurlServiceDiscovery = file_get_contents(SERVICE_DISCOVERY_URL);    
+	$xmlServiceDiscovery = simplexml_load_string($xmlurlServiceDiscovery, null, LIBXML_NOCDATA);
+	if(!$xmlurlServiceDiscovery)
+		$_SESSION['SMSErrorMessage'][] = SMS_ERROR_SERVER_PROBLEM;
+
+	//Find the valid and active endpoint from Service Discovery
+	foreach ($xmlServiceDiscovery->endpoints->endpoint as $endpoint) 
 	{
    		$endpointURL=(string)$endpoint->url;
 		if((string)$endpoint->type=='production')
 		{
-			$xmlurl = file_get_contents($endpointURL."/services.xml");    
-			$xml = simplexml_load_string($xmlurl, null, LIBXML_NOCDATA);
-			if (isset($xml->service[0]->service_code))
+			$xmlurlServiceList = file_get_contents($endpointURL."/services.xml");    
+			$xmlServiceList = simplexml_load_string($xmlurlServiceList, null, LIBXML_NOCDATA);
+			if (isset($xmlServiceList->service[0]->service_code))
 				break;
 		}
 	}
@@ -84,11 +90,12 @@ if (isset($resource) && isset($action) && $ZEND_ACL->has($resource)) {
 	}
 }
 // ACL not required if in SMS mode
-else if (($sms_mode)&&($xmlurl))
+else if ($sms_mode)
 {
+	
 	$controller = ucfirst($resource).'Controller';
-	$c = new $controller($template);
-	$c->$action($endpointURL);
+	$c = new $controller($template,$endpointURL,$xmlServiceList);
+	$c->$action();
 }
 else {
 	header('HTTP/1.1 404 Not Found', true, 404);

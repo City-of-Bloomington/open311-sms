@@ -4,13 +4,17 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Abhiroop Bhatnagar <bhatnagarabhiroop@gmail.com>
  */
-class InteractionMode4Controller extends Controller
+class InteractionMode4Controller extends SMSController
 {
 	public function index()
 	{
 		
 	}
-	public function generateResponse($endpoint)
+	public function __construct(Template $template,$endpoint,$xmlServiceList)
+	{
+		parent::__construct($template,$endpoint,$xmlServiceList);
+	}
+	public function generateFirstPageResponse()
 	{
 		$responseSMS['head']=HELP_INTRO_PAGE;
 		QueryRecord::save(4,1);
@@ -28,10 +32,8 @@ class InteractionMode4Controller extends Controller
 				$responseSMS['head']=SMSPages::returnHelpPages($matches[1],$matches[2]+1);
 				$pageInfo=$matches[1].','.($matches[2]+1);
 			}				
-			else
-			{
-				//error
-			}		
+			if(!isset($responseSMS['head']))
+				$_SESSION['SMSErrorMessage'][]=SMS_ERROR_INCORRECT_RESPONSE;		
 		}
 		else
 		{
@@ -47,7 +49,7 @@ class InteractionMode4Controller extends Controller
 				}
 				default:
 				{
-					//error
+					$_SESSION['SMSErrorMessage'][]=SMS_ERROR_INCORRECT_RESPONSE;
 				}
 			}
 		}

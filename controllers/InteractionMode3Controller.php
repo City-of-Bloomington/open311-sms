@@ -4,29 +4,32 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Abhiroop Bhatnagar <bhatnagarabhiroop@gmail.com>
  */
-class InteractionMode3Controller extends Controller
+class InteractionMode3Controller extends SMSController
 {
 	public function index()
 	{
 		
 	}
-	public function __construct(Template $template)
+	public function __construct(Template $template,$endpoint,$xmlServiceList)
 	{
-		parent::__construct($template);
+		parent::__construct($template,$endpoint,$xmlServiceList);
 	}
-	public function generateResponse($endpoint)
+	public function generateFirstPageResponse()
 	{
 		$incomingSMS=new IncomingSMS;
 		$serviceRequestId=$incomingSMS->getQueryText();
-		$xmlurlServiceList = file_get_contents($endpoint.'/requests/'.$serviceRequestId.'.xml');    
-		$xmlServiceList = simplexml_load_string($xmlurlServiceList, null, LIBXML_NOCDATA);
-		$request=$xmlServiceList->request;
+		$xmlurlServiceRequest = file_get_contents($this->endpoint.'/requests/'.$serviceRequestId.'.xml');    
+		$xmlServiceRequest = simplexml_load_string($xmlurlServiceRequest, null, LIBXML_NOCDATA);
+		$request=$xmlServiceRequest->request;
 		if(!isset($request))
 		{
-			//return error
+			if(is_numeric($serviceRequestId))		
+				$_SESSION['SMSErrorMessage'][]=SMS_ERROR_INVALID_SERVICE_REQUEST_ID;
+			else 
+				$_SESSION['SMSErrorMessage'][]=SMS_ERROR_INCORRECT_QUERY;
 		}
 		$responseSMS['head']=REQUEST_STATUS;
-		$responseSMS['head'].=$xmlServiceList->request->status;
+		$responseSMS['head'].=$request->status;
 		if(isset($request->status_notes))
 		{
 			$responseSMS['head'].=';'.REQUEST_STATUS_INFO;
@@ -39,5 +42,9 @@ class InteractionMode3Controller extends Controller
 		}
 		QueryRecord::save(3,1);
 		$this->template->smsBlocks=$responseSMS;
+	}
+	public function handleReplySMS()
+	{
+	
 	}
 }

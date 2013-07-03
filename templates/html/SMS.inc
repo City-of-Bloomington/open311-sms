@@ -4,8 +4,7 @@
 <body>
 	
 			<?php
-				include FRAMEWORK.'/errorMessages.php';
-				echo $this->includeSMSBlocks();
+				echo htmlentities($this->includeSMSBlocks());
 			?>
 </body>
 </html>

@@ -4,93 +4,70 @@
  * @license http://www.gnu.org/licenses/agpl.txt GNU/AGPL, see LICENSE.txt
  * @author Abhiroop Bhatnagar <bhatnagarabhiroop@gmail.com>
  */
-class InteractionMode1Controller extends Controller
+class InteractionMode1Controller extends SMSController
 {
 	public function index()
 	{
 		
 		
 	}
-	public function __construct(Template $template)
+	public function __construct(Template $template,$endpoint,$xmlServiceList)
 	{
-		parent::__construct($template);
-	}
-	
-	public function generateResponse($endpoint,$type=GET_SERVICE_LIST_RESPONSE,$page=1)
+		parent::__construct($template,$endpoint,$xmlServiceList);
+	}	
+	public function generateFirstPageResponse()
 	{	
-		$list=array();	
-		$xmlurl = file_get_contents($endpoint.'/services.xml');    
-		$xml = simplexml_load_string($xmlurl, null, LIBXML_NOCDATA);	
-		
-		if($type=='GROUPS')
-		{
-			$list=ServiceList::getGroupList($xml);	
-			$listType='GROUPS';		
-		}
-		else if($type=='SERVICES')
-		{
-			$list=ServiceList::getServiceList($xml);
-			$listType='SERVICES';			
-		}
-		else		
-		{
-			$groupList=ServiceList::getGroupList($xml);
-			$groupNumber=self::findGroupNumber($type);
-			$groupName=$groupList[$groupNumber];
-			$list=ServiceList::getServiceList($xml,$groupName);
-			$listType='SERVICES';
-		}
-		
-		$pages=SMSPages::constructServiceListPages($list,$listType);
-		if($page<=count($pages))
-		{	
-			QueryRecord::save(1,$page,$type);
-			$this->template->smsBlocks=$pages['page'.$page];		
-		}
-		else
-		{
-			//error
-		}
+		$page='1';
+		$list=self::getList(GET_SERVICE_LIST_RESPONSE);
+		$pages=SMSPages::constructServiceListPages($list,GET_SERVICE_LIST_RESPONSE);
+		QueryRecord::save(1,$page,GET_SERVICE_LIST_RESPONSE);
+		$this->template->smsBlocks=$pages['page'.$page];		
 	}
-	public function handleReplySMS($endpoint)
+	public function handleReplySMS()
 	{
+		$list=array();
 		$incomingSMS=new IncomingSMS;
 		$previousQuery=QueryRecord::getRecord($incomingSMS->getFrom());
 
 		if(  ($incomingSMS->getSubKeyword()==SUB_KEYWORD_MORE)&&
 				   ( ($previousQuery['additional_info']=='GROUPS')||
 					($previousQuery['additional_info']=='SERVICES') ) )
-			{
-				$page=$previousQuery['previous_page']+1;
-				$type=$previousQuery['additional_info'];	
-				$this->generateResponse($endpoint,$type,$page);
-			}
-				
+		{
+			$page=$previousQuery['previous_page']+1;
+			$type=$previousQuery['additional_info'];	
+		}				
 		else 
 		{
-			$validQuery=FALSE;
 			if(self::findGroupNumber($incomingSMS->getQueryText()))
 			{
 				$groupCode=$incomingSMS->getQueryText();
 				$page=1;
-				$validQuery=TRUE;
+				$type=$groupCode;			
 			}
 			else if (($incomingSMS->getSubKeyword()==SUB_KEYWORD_MORE)&&(self::findGroupNumber($previousQuery['additional_info'])))
 			{
 				$groupCode=$previousQuery['additional_info'];
 				$page=$previousQuery['previous_page']+1;
-				$validQuery=TRUE;
+				$type=$groupCode;
 			}
-			if($validQuery)
-			{	
-				$this->generateResponse($endpoint,$groupCode,$page);					
-			}		
 			else
 			{
-				//error
+				$_SESSION['SMSErrorMessage'][]=SMS_ERROR_INCORRECT_RESPONSE;
 			}
-		}
 			
+		}
+		$list=self::getList($type);
+		$listType=self::getListType($type);
+		$pages=SMSPages::constructServiceListPages($list,$listType);
+		if($page<=count($pages))
+		{	
+			QueryRecord::save(1,$page,$type);
+			$this->template->smsBlocks=$pages['page'.$page];	
+		}
+		else
+		{
+			$_SESSION['SMSErrorMessage'][]=SMS_ERROR_INCORRECT_RESPONSE;
+		}
 	}	
 	private static function findGroupNumber($string)
 	{
@@ -102,5 +79,40 @@ class InteractionMode1Controller extends Controller
 		{
 			return 0;
 		}
+	}
+	private function getList($type)
+	{
+		$list=array();
+		if($type=='GROUPS')
+		{
+			//Get list of Groups
+			$list=ServiceList::getGroupList($this->xmlServiceList);	
+		}
+		else if($type=='SERVICES')
+		{
+			//Get list of all Services
+			$list=ServiceList::getServiceList($this->xmlServiceList);
+		}
+		else		
+		{
+			//$type contains Group Code. Get list of services under that Group.
+			$groupList=ServiceList::getGroupList($this->xmlServiceList);
+			$groupNumber=self::findGroupNumber($type);
+			$groupName=$groupList[$groupNumber];
+			$list=ServiceList::getServiceList($this->xmlServiceList,$groupName);
+		}	
+		return $list;	
+	}
+	private function getListType($type)
+	{
+		if(($type=='GROUPS')||($type=='SERVICES'))
+		{
+			$listType=$type;
+		}
+		else
+		{
+			$listType='SERVICES';
+		}
+		return $listType;
 	}
 }
