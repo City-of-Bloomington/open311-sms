@@ -75,7 +75,7 @@ class InteractionMode2Controller extends SMSController
 	{
 		$incomingSMS=new IncomingSMS;
 		$previousQuery=QueryRecord::getRecord($incomingSMS->getFrom());
-		if(preg_match('/service_code=([0-9]*)/',$previousQuery['additional_info'],$matches))
+		if(preg_match('/service_code=([0-9]*)/i',$previousQuery['additional_info'],$matches))
 		{
 			$serviceNumber=$matches[1];
 		}
@@ -108,7 +108,7 @@ class InteractionMode2Controller extends SMSController
 			if($attributeList[$incomingAttributeOrder]['datatype']=='singlevaluelist')
 			{
 				$attributeValueSMSCode=$incomingSMS->getQueryText();
-				if(preg_match('/^'.SINGLEVALUELIST_OPTIONS_PREFIX.'([0-9]*)$/',$attributeValueSMSCode,$matches))
+				if(preg_match('/^'.SINGLEVALUELIST_OPTIONS_PREFIX.'([0-9]*)$/i',$attributeValueSMSCode,$matches))
 					$attributeValueNumber=$matches[1];
 				else
 				{
@@ -121,7 +121,7 @@ class InteractionMode2Controller extends SMSController
 			else if($attributeList[$incomingAttributeOrder]['datatype']=='multivaluelist')
 			{
 				$attributeValueSMSCodes=$incomingSMS->getQueryText();
-				if(preg_match_all('/'.MULTIVALUELIST_OPTIONS_PREFIX.'([0-9]*)/',$attributeValueSMSCodes,$matches))
+				if(preg_match_all('/'.MULTIVALUELIST_OPTIONS_PREFIX.'([0-9]*)/i',$attributeValueSMSCodes,$matches))
 				{
 					$attributeValueNumbers=array();				
 					$attributeValueNumbers=$matches[1];
@@ -216,7 +216,7 @@ class InteractionMode2Controller extends SMSController
 	}
 	private static function findServiceNumber($string)
 	{
-		if(preg_match('/^'.SERVICE_OPTIONS_PREFIX.'([0-9]*$)/', $string,$matches))
+		if(preg_match('/^'.SERVICE_OPTIONS_PREFIX.'([0-9]*$)/i', $string,$matches))
 		{
 			return $matches[1]; 
 		}

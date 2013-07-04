@@ -189,19 +189,20 @@ class Template extends View
 		ob_start();
 		if(!isset($_SESSION['SMSErrorMessage']))
 		{
-			echo $this->smsBlocks['head'];	
+			$outgoingSMS= $this->smsBlocks['head'];	
 			foreach($this->smsBlocks as $key=>$value)
 			{	
 				if(($key!='head')&&($key!='tail'))
-					echo $value;
+					$outgoingSMS.= $value;
 			}
 			if(isset($this->smsBlocks['tail']))
-				echo $this->smsBlocks['tail'];
+				$outgoingSMS.= $this->smsBlocks['tail'];
 		}
 		else
 		{
-			echo $_SESSION['SMSErrorMessage'][0];
+			$outgoingSMS= $_SESSION['SMSErrorMessage'][0];
 		}
+		echo $outgoingSMS;
 		return ob_get_clean();
-	}
+	}	
 }

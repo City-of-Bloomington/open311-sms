@@ -95,7 +95,7 @@ class IncomingSMS
 		$serviceCodeIndex=2;
 		if(!defined('SMS_KEYWORD')) {-- $serviceCodeIndex; }
 		if(is_null(self::getSubkeyword())) {-- $serviceCodeIndex; }
-		if(preg_match('/^'.SERVICE_OPTIONS_PREFIX.'[0-9]*$/',$this->smsBodyPieces[$serviceCodeIndex],$matches))	
+		if(preg_match('/^'.SERVICE_OPTIONS_PREFIX.'[0-9]*$/i',$this->smsBodyPieces[$serviceCodeIndex],$matches))	
 		{
 			return $this->smsBodyPieces[$serviceCodeIndex];
 		}

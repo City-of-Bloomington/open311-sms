@@ -71,7 +71,7 @@ class InteractionMode1Controller extends SMSController
 	}	
 	private static function findGroupNumber($string)
 	{
-		if(preg_match('/^'.GROUP_OPTIONS_PREFIX.'([0-9]*$)/', $string,$matches))
+		if(preg_match('/^'.GROUP_OPTIONS_PREFIX.'([0-9]*$)/i', $string,$matches))
 		{
 			return $matches[1]; 
 		}

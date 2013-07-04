@@ -13,23 +13,23 @@ class SMSPages
 		$pages['page1']=array();
 		$pages['page1']['head'] = ($type=='SERVICES')?SERVICE_LIST_INFO_TEXT_1:GROUP_LIST_INFO_TEXT_1;
 		$pages['page1']['tail'] = ($type=='SERVICES')?SERVICE_LIST_INFO_TEXT_2:GROUP_LIST_INFO_TEXT_2;
-		$characterCount=strlen(html_entity_decode($pages['page1']['head']))+
-					strlen(html_entity_decode($pages['page1']['tail']));
+		$characterCount=strlen(htmlspecialchars_decode($pages['page1']['head']))+
+					strlen(htmlspecialchars_decode($pages['page1']['tail']));
 		$i=1;
 		$pageNumber=1;	
 		foreach($list as $key=>$value)
 		{
-			$smsBlock=$prefix.$key.'-'.$value.';';
-			$characterCount=$characterCount+strlen(html_entity_decode($smsBlock));			
+			$smsBlock=self::optimize($prefix.$key.'-'.$value.';');
+			$characterCount=$characterCount+strlen(htmlspecialchars_decode($smsBlock));			
 			if($characterCount>=(int)SMS_CHARACTER_LIMIT)
 			{
 				$pageNumber++;
 				$pages['page'.$pageNumber]=array();
 				$pages['page'.$pageNumber]['head'] = ($type=='SERVICES')?SERVICE_LIST_INFO_TEXT_1:GROUP_LIST_INFO_TEXT_3;
 				$pages['page'.$pageNumber]['tail'] = ($type=='SERVICES')?SERVICE_LIST_INFO_TEXT_2:GROUP_LIST_INFO_TEXT_2;
-				$characterCount=strlen(html_entity_decode($pages['page'.$pageNumber]['head']))
-							+strlen(html_entity_decode($pages['page'.$pageNumber]['tail']));
-				$characterCount=$characterCount+strlen(html_entity_decode($smsBlock));
+				$characterCount=strlen(htmlspecialchars_decode($pages['page'.$pageNumber]['head']))
+							+strlen(htmlspecialchars_decode($pages['page'.$pageNumber]['tail']));
+				$characterCount=$characterCount+strlen(htmlspecialchars_decode($smsBlock));
 				$i=1;	
 			}
 			
@@ -49,8 +49,8 @@ class SMSPages
 		$pages['page1']['head'].=$attributeProperties['description'];
 		$pages['page1']['head'].=constant($datatype.'_DATATYPE_RESPONSE_TEXT_2');
 		$pages['page1']['tail'] = MORE_OPTIONS_TEXT;
-		$characterCount=strlen(html_entity_decode($pages['page1']['head']))+
-					strlen(html_entity_decode($pages['page1']['tail']));
+		$characterCount=strlen(htmlspecialchars_decode($pages['page1']['head']))+
+					strlen(htmlspecialchars_decode($pages['page1']['tail']));
 		
 		$pageNumber=1;		
 		if(($attributeProperties['datatype']=='singlevaluelist')||($attributeProperties['datatype']=='multivaluelist'))
@@ -59,17 +59,17 @@ class SMSPages
 			$i=1;
 			foreach($attributeProperties['values'] as $key => $value)
 			{
-				$smsBlock=constant($datatype.'_OPTIONS_PREFIX').$j.'-'.$value.';';
-				$characterCount=$characterCount+strlen(html_entity_decode($smsBlock));
+				$smsBlock=self::optimize(constant($datatype.'_OPTIONS_PREFIX').$j.'-'.$value.';');
+				$characterCount=$characterCount+strlen(htmlspecialchars_decode($smsBlock));
 				if($characterCount>=(int)SMS_CHARACTER_LIMIT)
 				{
 					$pageNumber++;
 					$pages['page'.$pageNumber]=array();
 					$pages['page'.$pageNumber]['head'] = OPTIONS_TEXT;
 					$pages['page'.$pageNumber]['tail'] = MORE_OPTIONS_TEXT;
-					$characterCount=strlen(html_entity_decode($pages['page'.$pageNumber]['head']))
-								+strlen(html_entity_decode($pages['page'.$pageNumber]['tail']));
-					$characterCount=$characterCount+strlen(html_entity_decode($smsBlock));
+					$characterCount=strlen(htmlspecialchars_decode($pages['page'.$pageNumber]['head']))
+								+strlen(htmlspecialchars_decode($pages['page'.$pageNumber]['tail']));
+					$characterCount=$characterCount+strlen(htmlspecialchars_decode($smsBlock));
 					$i=1;	
 				}
 				$pages['page'.$pageNumber][++$i] = $smsBlock;  
@@ -117,15 +117,15 @@ class SMSPages
 	{
 		if(count($pages)>1)
 		{
-			$lastPageOptionsLength=$characterCountLastPage-strlen(html_entity_decode($pages['page'.$lastPage]['head']))-strlen(html_entity_decode($pages['page'.$lastPage]['tail']));
+			$lastPageOptionsLength=$characterCountLastPage-strlen(htmlspecialchars_decode($pages['page'.$lastPage]['head']))-strlen(htmlspecialchars_decode($pages['page'.$lastPage]['tail']));
 			$secondLastPageOptionsLength=0;
 			foreach($pages['page'.($lastPage-1)] as $key=>$value)
 			{
 				if(($key!='head')&&($key!='tail'))
-					$secondLastPageOptionsLength=$secondLastPageOptionsLength+strlen(html_entity_decode($value));
+					$secondLastPageOptionsLength=$secondLastPageOptionsLength+strlen(htmlspecialchars_decode($value));
 			}
 			if(($lastPageOptionsLength+$secondLastPageOptionsLength+
-				strlen(html_entity_decode($pages['page'.($lastPage-1)]['head'])))<=(int)SMS_CHARACTER_LIMIT)
+				strlen(htmlspecialchars_decode($pages['page'.($lastPage-1)]['head'])))<=(int)SMS_CHARACTER_LIMIT)
 			{
 				$optionsCount=count($pages['page'.($lastPage-1)])-2;
 				foreach($pages['page'.($lastPage)] as $key=>$value)
@@ -140,6 +140,42 @@ class SMSPages
 				--$lastPage;
 			}	
 		}
+	}
+	/**
+	 * Text Optimization through replacement:
+     	 * All the text optimizations should be included here
+	 */
+	private static function optimize($outgoingSMS)
+	{
+		$patterns = array();
+		$replacements = array();
+		$patterns[0] = '/(\s)?&(\s)?/';
+		$replacements[0] = '&';
+
+		$patterns[1] = '/(\s)?and(\s)?/';
+		$replacements[1] = '&';
+
+		$patterns[2] = '/(\s)?:(\s)?/';
+		$replacements[2] = ':';
+
+		$patterns[3] = '/(\s)?;(\s)?/';
+		$replacements[3] = ';';
+
+		$patterns[4] = '/(\s)?-(\s)?/';
+		$replacements[4] = '-';
+
+		$patterns[5] = '/(\s)?\((\s)?/';
+		$replacements[5] = '(';
+
+		$patterns[6] = '/(\s)?\)(\s)?/';
+		$replacements[6] = ')';
+
+		$patterns[7] = '/(\s)?,(\s)?/';
+		$replacements[7] = ',';
+
+		ksort($patterns);
+		ksort($replacements);			
+		return preg_replace($patterns, $replacements, $outgoingSMS);
 	}
 }
 ?>

@@ -4,7 +4,7 @@
 <body>
 	
 			<?php
-				echo htmlentities($this->includeSMSBlocks());
+				echo  htmlspecialchars($this->includeSMSBlocks());
 			?>
 </body>
 </html>
