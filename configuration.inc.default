@@ -92,10 +92,10 @@ define('DB_PASS','password');
 
 /**
  * Response to get_service_codes
- * GROUP    - Return List of Groups
+ * GROUPS    - Return List of Groups
  * SERVICES - Return list of Services	 
  */
-define('GET_SERVICE_LIST_RESPONSE','GROUP');
+define('GET_SERVICE_LIST_RESPONSE','GROUPS');
 
 /**
  * Standard SMS character limit		 

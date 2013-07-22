@@ -17,7 +17,7 @@ if (preg_match('|'.BASE_URI.'(/([a-zA-Z0-9]+))?(/([a-zA-Z0-9]+))?|',$_SERVER['RE
 $sms_mode=FALSE;
 
 // Check for SMS mode
-if(($resource=='index')&&($action=='index')&&isset($_REQUEST))
+if(($resource=='SMSinterface')&&($action=='index')&&isset($_REQUEST))
 {
 	$sms_mode=TRUE;
 	$template = new Template('SMS',SMS_RESPONSE_FORMAT);
