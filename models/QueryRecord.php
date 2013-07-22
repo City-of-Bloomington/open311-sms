@@ -25,7 +25,8 @@ class QueryRecord
 		{
 			if($result)
 			{
-				$zend_db->update('query_record', $data, 'phone_number ='.$from);
+				$phone_number=$zend_db->quoteInto('phone_number =?',$from);
+				$zend_db->update('query_record', $data, $phone_number);
 			}
 			else
 			{		
