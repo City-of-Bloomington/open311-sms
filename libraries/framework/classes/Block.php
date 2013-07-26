@@ -22,7 +22,7 @@ class Block extends View
 	 * Establishes the block script to use for rendering
 	 *
 	 * Blocks are files contained in the base path of:
-	 * APPLICATION_HOME/blocks/$outpuform
+	 * APPLICATION_HOME/blocks/$outputform
 	 *
 	 * @param string $file
 	 * @param array $vars An associative array of variables to set

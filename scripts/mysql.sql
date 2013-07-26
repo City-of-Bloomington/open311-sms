@@ -11,17 +11,20 @@ CREATE TABLE `configuration` (
 );
 
 INSERT INTO `configuration` VALUES 
-(1,'Service Discovery URL','https://api.city.gov/discovery.xml'),
-(2,'Open 311 API Key','open311_api_key'),
-(3,'Open311 Jurisdiction Id','api.city.gov'),
-(4,'Get Service List Response','GROUPS'),
-(5,'SMS Character Limit','160'),
-(6,'SMS Keyword','keyword'),
-(7,'SMS Response Format','html'),
-(8,'SMS Body Parameter','Body'),
-(9,'SMS From Parameter','From'),
-(10,'SMS API Key Parameter','api_key_param'),
-(11,'SMS API Key','api_key');
+(1,'serviceDiscoveryURL','https://api.city.gov/discovery.xml'),
+(2,'open311APIKey','open311_api_key'),
+(3,'open311JurisdictionId','api.city.gov'),
+(4,'getServiceListResponse','GROUPS'),
+(5,'SMSCharacterLimit','160'),
+(6,'useSMSKeyword','No'),
+(7,'SMSKeyword','keyword'),
+(8,'SMSResponseFormat','html'),
+(9,'SMSBodyParameter','Body'),
+(10,'SMSFromParameter','From'),
+(11,'SMSAPIKeyParameter','api_key_param'),
+(12,'SMSAPIKey','api_key'),
+(13,'language','en');
+
 
 
 CREATE TABLE `people` (

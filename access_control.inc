@@ -17,7 +17,7 @@ $ZEND_ACL->add(new Zend_Acl_Resource('index'));
 $ZEND_ACL->add(new Zend_Acl_Resource('people'));
 $ZEND_ACL->add(new Zend_Acl_Resource('users'));
 $ZEND_ACL->add(new Zend_Acl_Resource('login'));
-$ZEND_ACL->add(new Zend_Acl_Resource('configPanel'));
+$ZEND_ACL->add(new Zend_Acl_Resource('configurationPanel'));
 
 
 /**
