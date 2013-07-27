@@ -187,16 +187,16 @@ class InteractionMode2Controller extends SMSController
 	{
 		if($fields)
 		{
-			$fields['api_key'] = API_KEY;
-			$fields['jurisdiction_id'] =defined('OPEN311_JURISDICTION_ID')?OPEN311_JURISDICTION_ID:NULL;
+			$fields['api_key'] = ConfigurationList::get('open311APIKey');
+			$fields['jurisdiction_id'] =ConfigurationList::get('open311JurisdictionId');
 			$fieldString=self::constructFieldString($fields);
 		}
 		else if($fieldString)
 		{
 			if(!preg_match('/api_key/',$fieldString))
-				$fieldString.='&api_key='.API_KEY;
+				$fieldString.='&api_key='.ConfigurationList::get('open311APIKey');
 			if(!preg_match('/jurisdiction_id/',$fieldString))
-				$fieldString.='&jurisdiction_id='.OPEN311_JURISDICTION_ID;
+				$fieldString.='&jurisdiction_id='.ConfigurationList::get('open311JurisdictionId');
 		}
 		//open connection
 		$ch = curl_init();

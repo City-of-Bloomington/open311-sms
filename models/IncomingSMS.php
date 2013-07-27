@@ -13,9 +13,9 @@ class IncomingSMS
 
 	public function __construct()
 	{
-		$this->smsFrom  = trim(self::fetchValuefromKey(SMS_FROM));
-		$this->smsBody  = trim(self::fetchValuefromKey(SMS_BODY));
-		$this->smsAPIKey= defined('SMS_API_KEY_PARAM')?trim(self::fetchValuefromKey(SMS_API_KEY_PARAM)):NULL;
+		$this->smsFrom  = trim(self::fetchValuefromKey(ConfigurationList::get('SMSFromParameter')));
+		$this->smsBody  = trim(self::fetchValuefromKey(ConfigurationList::get('SMSBodyParameter')));
+		$this->smsAPIKey= (ConfigurationList::get('APIKeyRequired')=='Yes')?trim(self::fetchValuefromKey(ConfigurationList::get('SMSAPIKeyParameter'))):NULL;
 		$this->smsBodyPieces=explode(" ",$this->smsBody,4);
 	}
 	
@@ -25,7 +25,7 @@ class IncomingSMS
 		if(isset($this->smsAPIKey))
 		{
 			
-			if(($this->smsAPIKey)==SMS_API_KEY)
+			if(($this->smsAPIKey)==ConfigurationList::get('SMSAPIKey'))
 				return TRUE;
 			else
 			{	
@@ -38,9 +38,9 @@ class IncomingSMS
 	public function isKeywordMatched()
 	{
 		$keyword=$this->smsBodyPieces[0];
-		if(defined('SMS_KEYWORD'))
+		if(ConfigurationList::get('useSMSKeyword')=='Yes')
 		{
-			if($keyword==SMS_KEYWORD)	
+			if($keyword==ConfigurationList::get('SMSKeyword'))	
 			{
 				return TRUE;
 			}
@@ -56,7 +56,7 @@ class IncomingSMS
 	{
 		$subKeywordIndex=1;
 		
-		if (!defined('SMS_KEYWORD'))
+		if (ConfigurationList::get('useSMSKeyword')=='No')
 		{
 			--$subKeywordIndex;
 		}
@@ -74,7 +74,7 @@ class IncomingSMS
 	public function getSubKeyword()
 	{
 		$SubKeywordIndex=1;		
-		if (!defined('SMS_KEYWORD'))
+		if (ConfigurationList::get('useSMSKeyword')=='No')
 		{
 			--$SubKeywordIndex;
 		}
@@ -93,7 +93,7 @@ class IncomingSMS
 	public function getServiceCode()	
 	{
 		$serviceCodeIndex=2;
-		if(!defined('SMS_KEYWORD')) {-- $serviceCodeIndex; }
+		if(ConfigurationList::get('useSMSKeyword')=='No') {-- $serviceCodeIndex; }
 		if(is_null(self::getSubkeyword())) {-- $serviceCodeIndex; }
 		if(preg_match('/^'.SERVICE_OPTIONS_PREFIX.'[0-9]*$/i',$this->smsBodyPieces[$serviceCodeIndex],$matches))	
 		{
@@ -107,7 +107,7 @@ class IncomingSMS
 	public function getQueryText()	
 	{
 		$queryTextIndex=3;
-		if(!defined('SMS_KEYWORD')) {-- $queryTextIndex; }
+		if(ConfigurationList::get('useSMSKeyword')=='No') {-- $queryTextIndex; }
 		if(is_null(self::getSubkeyword())) {-- $queryTextIndex; }
 		if(is_null(self::getServiceCode())) {-- $queryTextIndex; }		
 		/* 
@@ -132,6 +132,4 @@ class IncomingSMS
         { 
 		return $this->smsFrom;           
 	}
-	
-	
 }

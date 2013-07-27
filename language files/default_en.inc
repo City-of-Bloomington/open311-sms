@@ -1,4 +1,11 @@
 <?php
+
+/**
+ * Define Initial Constants to help in constructing language strings
+ */
+
+define('SMS_KEYWORD',ConfigurationList::get('SMSKeyword'));
+
 /**
  * Sub-Keywords
  */

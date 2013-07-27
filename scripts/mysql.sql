@@ -21,9 +21,10 @@ INSERT INTO `configuration` VALUES
 (8,'SMSResponseFormat','html'),
 (9,'SMSBodyParameter','Body'),
 (10,'SMSFromParameter','From'),
-(11,'SMSAPIKeyParameter','api_key_param'),
-(12,'SMSAPIKey','api_key'),
-(13,'language','en');
+(11,'APIKeyRequired','Yes'),
+(12,'SMSAPIKeyParameter','api_key_param'),
+(13,'SMSAPIKey','api_key'),
+(14,'language','en');
 
 
 
