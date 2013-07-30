@@ -28,7 +28,9 @@ class ConfigurationController extends Controller
 				$_SESSION['errorMessages'][] = $e;
 			}
 		}
-		$this->template->blocks[]=new Block('configPanel/configList.inc');
+		$configurationList= new ConfigurationList;
+		$configurationList=$configurationList->getArray();
+		$this->template->blocks[]=new Block('configPanel/configList.inc',array('configurationList'=>$configurationList));
 	}
 }
 ?>

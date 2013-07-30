@@ -22,6 +22,10 @@ class ConfigurationList
 		$config=new ConfigurationList;
 		return $config->configurationList[$configName];
 	}
+	public function getArray()
+	{
+		return $this->configurationList;
+	}
 	public function set($configName,$configValue)
 	{
 		$zend_db = Database::getConnection();
