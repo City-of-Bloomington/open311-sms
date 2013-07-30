@@ -187,14 +187,14 @@ class InteractionMode2Controller extends SMSController
 	{
 		if($fields)
 		{
-			$fields['api_key'] = API_KEY;
+			$fields['api_key'] = OPEN311_API_KEY;
 			$fields['jurisdiction_id'] =defined('OPEN311_JURISDICTION_ID')?OPEN311_JURISDICTION_ID:NULL;
 			$fieldString=self::constructFieldString($fields);
 		}
 		else if($fieldString)
 		{
 			if(!preg_match('/api_key/',$fieldString))
-				$fieldString.='&api_key='.API_KEY;
+				$fieldString.='&api_key='.OPEN311_API_KEY;
 			if(!preg_match('/jurisdiction_id/',$fieldString))
 				$fieldString.='&jurisdiction_id='.OPEN311_JURISDICTION_ID;
 		}
