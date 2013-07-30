@@ -17,21 +17,6 @@ define('BASE_URL','http://localhost/open311-sms');
 define('BASE_URI','/open311-sms');
 
 /**
- * The URL to Service Discovery (XML) of the relevant Open311 Server
- */
-define('SERVICE_DISCOVERY_URL','https://api.city.gov/discovery.xml');
-
-/**
- * API Key of the relevant Open311 Server
- */
-define('OPEN311_API_KEY','open311_api_key');
-
-/**
- * Jurisdiction Id of the relevant Open311 Server
- */
-define('OPEN311_JURISDICTION_ID','api.city.gov');
-
-/**
  * Where on the filesystem the framework is installed.
  */
 define('FRAMEWORK',APPLICATION_HOME.'/libraries/framework');
@@ -91,58 +76,49 @@ define('DB_USER',APPLICATION_NAME);
 define('DB_PASS','password');
 
 /**
- * Response to get_service_codes
- * GROUPS    - Return List of Groups
- * SERVICES - Return list of Services	 
+ * Directory Configuration
+ *
+ * This supports doing user authentication from multiple external
+ * directories, such as LDAP or ADS. This is required since city staff
+ * are in a seperate LDAP directory from public user accounts.
+ * Classes that implement ExternalIdentity should have an entry here.
+ *
+ * See: ExternalIdentity
  */
-define('GET_SERVICE_LIST_RESPONSE','GROUPS');
+// Example for ADS style authentication
+$DIRECTORY_CONFIG = array(
+// 'Employee'=>array(
+// 'DIRECTORY_SERVER'=>'ldaps://example.org:636',
+// 'DIRECTORY_BASE_DN'=>'OU=Department,DC=example,DC=org',
+// 'DIRECTORY_USERNAME_ATTRIBUTE'=>'CN',
+// 'DIRECTORY_USER_BINDING'=>'{username}@example.org',
+// 'DIRECTORY_ADMIN_BINDING'=>'admin@example.org',
+// 'DIRECTORY_ADMIN_PASS'=>'password'
+// )
+);
+// Example for LDAP style authentication
+//$DIRECTORY_CONFIG = array(
+// 'Employee'=>array(
+// 'DIRECTORY_SERVER'=>'ldaps://example.org:636');
+// 'DIRECTORY_BASE_DN'=>'ou=people,o=ldap.domain.somewhere');
+// 'DIRECTORY_USERNAME_ATTRIBUTE'=>'uid');
+// 'DIRECTORY_USER_BINDING'=>'uid={username},'.DIRECTORY_BASE_DN);
+// 'DIRECTORY_ADMIN_BINDING'=>'uid=admin,'.DIRECTORY_BASE_DN);
+// 'DIRECTORY_ADMIN_PASS'=>'password');
+// )
+//);
 
 /**
- * Standard SMS character limit		 
+ * CAS authentication http://www.jasig.org/cas
+ *
+ * https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * phpCAS is a PHP library for handling the calls to the CAS service
+ * It is the official library, part of the Jasig CAS project
  */
-define('SMS_CHARACTER_LIMIT','160');
-//-----------------------------------------------------------------------------------
-// SMS-forwarding client specific settings:
-// These will be provided by the service provider of your SMS-forwarding services.
-//-----------------------------------------------------------------------------------
-
-/**
- * SMS Keyword
- * All SMSs sent from user's phone will begin with this keyword. If your 
- * SMS-forwarding client strips down the keyword from the SMS body before 
- * sending it you, comment out the below line.
- */
-define('SMS_KEYWORD','keyword');
-
-/**
- * Response format required by the SMS client
- * 
- * Choose the format in which the SMS client requires the response
- * html   - Response will be enclosed in <body> tags
- * xml    - Response will be enclosed in <response> tags
- */
-define('SMS_RESPONSE_FORMAT','html');
-
-/**
- * Request parameter corresponding to the Body of the SMS
- */
-define('SMS_BODY','Body');
-
-/**
- * Request parameter corresponding to phone number from which SMS was sent
- */
-define('SMS_FROM','From');
-
-/**
- * Request parameter corresponding to API key
- */
-//define('SMS_API_KEY_PARAM','api_key_param');
-
-/**
- * API Key
- */
-//define('SMS_API_KEY','api_key');
-
+//define('CAS','/var/www/libraries/phpCAS');
+//define('CAS_SERVER','cas.somewhere.org');
+//define('CAS_URI','cas');
 
 //-------------------------------------------------------------------
 // Bootstrap code
