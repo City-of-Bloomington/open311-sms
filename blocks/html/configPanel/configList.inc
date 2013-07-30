@@ -12,70 +12,126 @@ $configurationList= new ConfigurationList;
 
 <div class="container">
 	<h2>Configuration Panel</h2>
-	<form method="post" action="<?php echo $_SERVER['REDIRECT_URL']; ?>">
+	<form method="post" action="<?php echo $_SERVER['REDIRECT_URL']; ?>" class='form-horizontal'>
 		<fieldset><legend>Configuration</legend>
-			<table>
-				<tr><td><label for="serviceDiscoveryURL" class="required">Service Discovery URL</label></td>
-					<td><input name="serviceDiscoveryURL" id="serviceDiscoveryURL" value="<?php echo View::escape($configurationList->get('serviceDiscoveryURL')); ?>" /></td>
-				</tr>
+		<div class='form-group'>
+			<label for="serviceDiscoveryURL" class="col-lg-2 control-label">Service Discovery URL</label>
+			<div class='col-lg-10'>
+			<input name="serviceDiscoveryURL" class="form-control" id="serviceDiscoveryURL" value="<?php echo View::escape($configurationList->get('serviceDiscoveryURL')); ?>" />
+			</div>
+      		</div>
 
-				<tr><td><label for="open311APIKey" class="required">Open311 APIKey</label></td>
-					<td><input name="open311APIKey" id="open311APIKey" value="<?php echo View::escape($configurationList->get('open311APIKey')); ?>" /></td>
-				</tr>
+		<div class='form-group'>	
+			<label for="open311APIKey" class="col-lg-2 control-label">Open311 APIKey</label></td>
+			<div class='col-lg-10'>
+			<input name="open311APIKey" class="form-control" id="open311APIKey" value="<?php echo View::escape($configurationList->get('open311APIKey')); ?>" />
+			</div>
+	   	</div>
 
-				<tr><td><label for="open311JurisdictionId" class="required">Open311 Jurisdiction Id</label></td>
-					<td><input name="open311JurisdictionId" id="open311JurisdictionId" value="<?php echo View::escape($configurationList->get('open311JurisdictionId'));  ?>" /></td>
-				</tr>
-
-				<tr><td><label for="getServiceListResponse" class="required">Response to Get Service List Interaction Mode</label></td>
-					<td><input name="getServiceListResponse" id="getServiceListResponse" value="<?php echo View::escape($configurationList->get('getServiceListResponse')); ?>" /></td>
-				</tr>
-
-				<tr><td><label for="SMSCharacterLimit" class="required">SMS Character Limit</label></td>
-					<td><input name="SMSCharacterLimit" id="SMSCharacterLimit" value="<?php echo View::escape($configurationList->get('SMSCharacterLimit')); ?>" /></td>
-				</tr>
-
-				<tr><td><label for="useSMSKeyword" class="required">Use SMS Keyword?</label></td>
-					<td><input name="useSMSKeyword" id="useSMSKeyword" value="<?php echo View::escape($configurationList->get('useSMSKeyword')); ?>" /></td>
-				</tr>
+		<div class='form-group'>
+			<label for="open311JurisdictionId" class="col-lg-2 control-label">Open311 Jurisdiction Id</label>
+			<div class='col-lg-10'>
+			<input name="open311JurisdictionId" class="form-control" id="open311JurisdictionId" value="<?php echo View::escape($configurationList->get('open311JurisdictionId'));  ?>" />
+			</div>
+		</div>
+			
+		<div class='form-group'>
+			<label for="getServiceListResponse" class="col-lg-2 control-label">Response to Get Service List Interaction Mode</label>
+			<div class='col-lg-10'>	
+				<label class="radio-inline">
+					<input type="radio" name="getServiceListResponse" id="GROUPS" value="GROUPS" <?php  if(View::escape($configurationList->get('getServiceListResponse'))=='GROUPS') echo 'checked' ;?> >Return list of Groups
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="getServiceListResponse" id="SERVICES" value="SERVICES" <?php  if(View::escape($configurationList->get('getServiceListResponse'))=='SERVICES') echo 'checked' ;?>>Return list of Services
+				</label>
+			</div>
+		</div>			
 		
-				<tr><td><label for="SMSKeyword">SMS Keyword</label></td>
-					<td><input name="SMSKeyword" id="SMSKeyword" value="<?php echo View::escape($configurationList->get('SMSKeyword')) ?>" /></td>
-				</tr>
+		<div class='form-group'>
+			<label for="SMSCharacterLimit" class="col-lg-2 control-label">SMS Character Limit</label></td>
+		
+			<div class='col-lg-10'>			
+			<input name="SMSCharacterLimit" class="form-control" id="SMSCharacterLimit" value="<?php echo View::escape($configurationList->get('SMSCharacterLimit')); ?>" />
+			</div>	
+		</div>	
+	
+		<div class='form-group'>
+			<label for="useSMSKeyword" class="col-lg-2 control-label">Use SMS Keyword?</label></td>
+			<div class='col-lg-10'>	
+				<label class="radio-inline">
+					<input type="radio" name="useSMSKeyword" id="Yes" value="Yes" <?php  if(View::escape($configurationList->get('useSMSKeyword'))=='Yes') echo 'checked' ;?>>Yes
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="useSMSKeyword" id="No" value="No" <?php  if(View::escape($configurationList->get('useSMSKeyword'))=='No') echo 'checked' ;?>>No
+				</label>		
+			</div>	
+		</div>	
+		
+		<div class='form-group'>
+			<label for="SMSKeyword" class="col-lg-2 control-label">SMS Keyword</label>
+			<div class='col-lg-10'>			
+			<input name="SMSKeyword" class="form-control" id="SMSKeyword" value="<?php echo View::escape($configurationList->get('SMSKeyword')) ?>" />
+			</div>	
+		</div>	
+					
+		<div class='form-group'>
+			<label for="SMSResponseFormat" class="col-lg-2 control-label">SMSResponseFormat</label>
+			<div class='col-lg-10'>	
+				<label class="radio-inline">
+					<input type="radio" name="SMSResponseFormat" id="html" value="html" <?php  if(View::escape($configurationList->get('SMSResponseFormat'))=='html') echo 'checked' ;?>>HTML
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="SMSResponseFormat" id="xml" value="xml" <?php  if(View::escape($configurationList->get('SMSResponseFormat'))=='xml') echo 'checked' ;?>>XML
+				</label>		
+			</div>	
+		</div>	
 
-				<tr><td><label for="SMSResponseFormat" class="required">SMSResponseFormat</label></td>
-					<td><input name="SMSResponseFormat" id="SMSResponseFormat" value="<?php echo View::escape($configurationList->get('SMSResponseFormat')); ?>" /></td>
-				</tr>
-
-				<tr><td><label for="SMSBodyParameter" class="required">SMS Body Parameter</label></td>
-					<td><input name="SMSBodyParameter" id="SMSBodyParameter" value="<?php echo View::escape($configurationList->get('SMSBodyParameter')); ?>" />
-					</td>
-				</tr>
-
-				<tr><td><label for="SMSFromParameter" class="required">SMS From Parameter</label></td>
-					<td><input name="SMSFromParameter" id="SMSFromParameter"  value="<?php echo View::escape($configurationList->get('SMSFromParameter')); ?>" />
-					</td>
-				</tr>
-
-				<tr><td><label for="APIKeyRequired">Is API Key Required?</label></td>
-					<td><input name="APIKeyRequired" id="APIKeyRequired" value="<?php echo View::escape($configurationList->get('APIKeyRequired')); ?>" />
-					</td>
-				</tr>
-
-				<tr><td><label for="SMSAPIKeyParameter">SMSAPIKeyParameter</label></td>
-					<td><input name="SMSAPIKeyParameter" id="SMSAPIKeyParameter" value="<?php echo View::escape($configurationList->get('SMSAPIKeyParameter')); ?>" />
-					</td>
-				</tr>
-
-				<tr><td><label for="SMSAPIKey">SMSAPIKey</label></td>
-					<td><input name="SMSAPIKey" id="SMSAPIKey" value="<?php echo View::escape($configurationList->get('SMSAPIKey')); ?>" />
-					</td>
-				</tr>
-				<tr><td><label for="language">Language</label></td>
-					<td><input name="language" id="language" value="<?php echo View::escape($configurationList->get('language')); ?>" />
-					</td>
-				</tr>
-			</table>
+		<div class='form-group'>
+			<label for="SMSBodyParameter" class="col-lg-2 control-label">SMS Body Parameter</label>
+			<div class='col-lg-10'>			
+			<input name="SMSBodyParameter" class="form-control" id="SMSBodyParameter" value="<?php echo View::escape($configurationList->get('SMSBodyParameter')); ?>" />
+			</div>	
+		</div>	
+			
+		<div class='form-group'>		
+			<label for="SMSFromParameter" class="col-lg-2 control-label">SMS From Parameter</label>
+			<div class='col-lg-10'>			
+			<input name="SMSFromParameter" class="form-control" id="SMSFromParameter"  value="<?php echo View::escape($configurationList->get('SMSFromParameter')); ?>" />
+			</div>	
+		</div>	
+			
+		<div class='form-group'>		
+			<label for="APIKeyRequired" class="col-lg-2 control-label">Is API Key Required?</label></td>
+			<div class='col-lg-10'>	
+				<label class="radio-inline">
+					<input type="radio" name="APIKeyRequired" id="Yes" value="Yes" <?php  if(View::escape($configurationList->get('APIKeyRequired'))=='Yes') echo 'checked' ;?>>Yes
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="APIKeyRequired" id="No" value="No" <?php  if(View::escape($configurationList->get('APIKeyRequired'))=='No') echo 'checked' ;?>>No
+				</label>		
+			</div>	
+		</div>	
+			
+		<div class='form-group'>		
+			<label for="SMSAPIKeyParameter" class="col-lg-2 control-label">SMSAPIKeyParameter</label></td>
+			<div class='col-lg-10'>				
+			<input name="SMSAPIKeyParameter" class="form-control" id="SMSAPIKeyParameter" value="<?php echo View::escape($configurationList->get('SMSAPIKeyParameter')); ?>" />
+			</div>	
+		</div>	
+			
+		<div class='form-group'>		
+			<label for="SMSAPIKey" class="col-lg-2 control-label">SMSAPIKey</label></td>
+			<div class='col-lg-10'>			
+			<input name="SMSAPIKey" class="form-control" id="SMSAPIKey" value="<?php echo View::escape($configurationList->get('SMSAPIKey')); ?>" />
+			</div>	
+		</div>	
+		
+		<div class='form-group'>
+			<label for="language" class="col-lg-2 control-label">Language</label></td>
+			<div class='col-lg-10'>
+			<input name="language" class="form-control" id="language" value="<?php echo View::escape($configurationList->get('language')); ?>" />
+			</div>	
+		</div>	
 		</fieldset>
 <fieldset><legend>Submit</legend>
 			<button type="submit" class="btn btn-primary">Submit</button>
