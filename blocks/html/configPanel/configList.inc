@@ -10,7 +10,7 @@ $configurationList= new ConfigurationList;
 ?>
 
 
-<div class="configurationPanel">
+<div class="container">
 	<h2>Configuration Panel</h2>
 	<form method="post" action="<?php echo $_SERVER['REDIRECT_URL']; ?>">
 		<fieldset><legend>Configuration</legend>
@@ -78,7 +78,7 @@ $configurationList= new ConfigurationList;
 			</table>
 		</fieldset>
 <fieldset><legend>Submit</legend>
-			<button type="submit" class="submit">Submit</button>
+			<button type="submit" class="btn btn-primary">Submit</button>
 			<?php
 				if (isset($_REQUEST['return_url'])) {
 					$return_url = urlencode($_REQUEST['return_url']);
