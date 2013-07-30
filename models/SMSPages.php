@@ -6,7 +6,7 @@
  */
 class SMSPages
 {	
-	public static function constructServiceListPages(array $list,$type)
+	public static function constructServiceListPages($list,$type)
 	{
 		$prefix=($type=='SERVICES')?SERVICE_OPTIONS_PREFIX:GROUP_OPTIONS_PREFIX;
 		$pages=array();
