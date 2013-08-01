@@ -10,6 +10,12 @@ $title = $this->user->getId() ? "Edit {$this->user->getUsername()}" : "Create Us
 <div class="updateUserForm">
 	<h2><?php echo $title; ?></h2>
 	<form method="post" action="<?php echo BASE_URL; ?>/users/update">
+		<fieldset><legend>Personal Info</legend>
+			<?php
+				$this->person = $this->user;
+				include APPLICATION_HOME.'/blocks/html/people/personFields.inc';
+			?>
+		</fieldset>
 		<fieldset><legend>User Account</legend>
 			<input name="user_id" type="hidden" value="<?php echo $this->user->getId(); ?>" />
 			<table>
