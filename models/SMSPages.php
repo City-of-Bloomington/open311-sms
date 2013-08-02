@@ -6,7 +6,7 @@
  */
 class SMSPages
 {	
-	public static function constructServiceListPages(array $list,$type)
+	public static function constructServiceListPages($list,$type)
 	{
 		$prefix=($type=='SERVICES')?SERVICE_OPTIONS_PREFIX:GROUP_OPTIONS_PREFIX;
 		$pages=array();
@@ -21,7 +21,7 @@ class SMSPages
 		{
 			$smsBlock=self::optimize($prefix.$key.'-'.$value.';');
 			$characterCount=$characterCount+strlen(htmlspecialchars_decode($smsBlock));			
-			if($characterCount>=(int)SMS_CHARACTER_LIMIT)
+			if($characterCount>=(int)ConfigurationList::get('SMSCharacterLimit'))
 			{
 				$pageNumber++;
 				$pages['page'.$pageNumber]=array();
@@ -61,7 +61,7 @@ class SMSPages
 			{
 				$smsBlock=self::optimize(constant($datatype.'_OPTIONS_PREFIX').$j.'-'.$value.';');
 				$characterCount=$characterCount+strlen(htmlspecialchars_decode($smsBlock));
-				if($characterCount>=(int)SMS_CHARACTER_LIMIT)
+				if($characterCount>=(int)ConfigurationList::get('SMSCharacterLimit'))
 				{
 					$pageNumber++;
 					$pages['page'.$pageNumber]=array();
@@ -88,7 +88,7 @@ class SMSPages
 				3=>array() );
 		//helpPages description: helpPages[InteractionMode][PageNumber]
 
-		if(GET_SERVICE_LIST_RESPONSE=='GROUPS')
+		if(ConfigurationList::get('getServiceListResponse')=='GROUPS')
 		{
 			$helpPages[1]=self::gatherHelpPages($helpPages[1],'HELP_GET_SERVICE_CODES_GROUPS_PAGE_');
 		}
@@ -125,7 +125,7 @@ class SMSPages
 					$secondLastPageOptionsLength=$secondLastPageOptionsLength+strlen(htmlspecialchars_decode($value));
 			}
 			if(($lastPageOptionsLength+$secondLastPageOptionsLength+
-				strlen(htmlspecialchars_decode($pages['page'.($lastPage-1)]['head'])))<=(int)SMS_CHARACTER_LIMIT)
+				strlen(htmlspecialchars_decode($pages['page'.($lastPage-1)]['head'])))<=(int)ConfigurationList::get('SMSCharacterLimit'))
 			{
 				$optionsCount=count($pages['page'.($lastPage-1)])-2;
 				foreach($pages['page'.($lastPage)] as $key=>$value)

@@ -18,9 +18,9 @@ class InteractionMode1Controller extends SMSController
 	public function generateFirstPageResponse()
 	{	
 		$page='1';
-		$list=self::getList(GET_SERVICE_LIST_RESPONSE);
-		$pages=SMSPages::constructServiceListPages($list,GET_SERVICE_LIST_RESPONSE);
-		QueryRecord::save(1,$page,GET_SERVICE_LIST_RESPONSE);
+		$list=self::getList(ConfigurationList::get('getServiceListResponse'));
+		$pages=SMSPages::constructServiceListPages($list,ConfigurationList::get('getServiceListResponse'));
+		QueryRecord::save(1,$page,ConfigurationList::get('getServiceListResponse'));
 		$this->template->smsBlocks=$pages['page'.$page];		
 	}
 	public function handleReplySMS()

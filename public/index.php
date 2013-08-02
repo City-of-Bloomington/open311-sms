@@ -5,7 +5,7 @@
  * @authors Cliff Ingham <inghamn@bloomington.in.gov>,Abhiroop Bhatnagar <bhatnagarabhiroop@gmail.com>
  */
 include '../configuration.inc';
-include '../language files/default_'.LANGUAGE.'.inc';
+include '../language files/default_'.ConfigurationList::get('language').'.inc';
 
 
 // Check for routes
@@ -17,10 +17,10 @@ if (preg_match('|'.BASE_URI.'(/([a-zA-Z0-9]+))?(/([a-zA-Z0-9]+))?|',$_SERVER['RE
 $sms_mode=FALSE;
 
 // Check for SMS mode
-if(($resource=='index')&&($action=='index')&&isset($_REQUEST))
+if(($resource=='SMSinterface')&&($action=='index')&&isset($_REQUEST))
 {
 	$sms_mode=TRUE;
-	$template = new Template('SMS',SMS_RESPONSE_FORMAT);
+	$template = new Template('SMS',ConfigurationList::get('SMSResponseFormat'));
 	$incomingSMS=new IncomingSMS;
 	unset($_SESSION['SMSErrorMessage']);
 
@@ -54,7 +54,7 @@ if(($resource=='index')&&($action=='index')&&isset($_REQUEST))
 	if(isset($interactionMode))
 		$resource='InteractionMode'.$interactionMode;
 	
-	$xmlurlServiceDiscovery = file_get_contents(SERVICE_DISCOVERY_URL);    
+	$xmlurlServiceDiscovery = file_get_contents(ConfigurationList::get('serviceDiscoveryURL'));    
 	$xmlServiceDiscovery = simplexml_load_string($xmlurlServiceDiscovery, null, LIBXML_NOCDATA);
 	if(!$xmlurlServiceDiscovery)
 		$_SESSION['SMSErrorMessage'][] = SMS_ERROR_SERVER_PROBLEM;

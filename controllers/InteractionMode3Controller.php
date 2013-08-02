@@ -45,6 +45,7 @@ class InteractionMode3Controller extends SMSController
 	}
 	public function handleReplySMS()
 	{
-	
+		//This mode does not handle Reply SMS. Therefore, any reply SMS should be considered an Incorrect Response
+		$_SESSION['SMSErrorMessage'][]=SMS_ERROR_INCORRECT_QUERY;
 	}
 }
