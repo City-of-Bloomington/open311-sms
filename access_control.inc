@@ -19,11 +19,13 @@ $ZEND_ACL->add(new Zend_Acl_Resource('users'));
 $ZEND_ACL->add(new Zend_Acl_Resource('login'));
 $ZEND_ACL->add(new Zend_Acl_Resource('configuration'));
 $ZEND_ACL->add(new Zend_Acl_Resource('simulator'));
+$ZEND_ACL->add(new Zend_Acl_Resource('SMSinterface'));
 
 /**
  * Assign permissions to the resources
  */
 $ZEND_ACL->allow(null,'login');
+$ZEND_ACL->allow(null,'SMSinterface');
 
 // Permissions for unauthenticated browsing
 $ZEND_ACL->allow(null,
