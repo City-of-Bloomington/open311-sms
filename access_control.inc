@@ -18,7 +18,7 @@ $ZEND_ACL->add(new Zend_Acl_Resource('people'));
 $ZEND_ACL->add(new Zend_Acl_Resource('users'));
 $ZEND_ACL->add(new Zend_Acl_Resource('login'));
 $ZEND_ACL->add(new Zend_Acl_Resource('configuration'));
-
+$ZEND_ACL->add(new Zend_Acl_Resource('simulator'));
 
 /**
  * Assign permissions to the resources
