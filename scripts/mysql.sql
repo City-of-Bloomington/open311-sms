@@ -27,7 +27,6 @@ INSERT INTO `configuration` VALUES
 (14,'language','en');
 
 
-
 CREATE TABLE `people` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `firstname` varchar(128) NOT NULL,
@@ -40,6 +39,63 @@ CREATE TABLE `people` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
 ) ;
+
+CREATE TABLE `language_en` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `blockName` varchar(255) NOT NULL,
+  `blockValue` text,
+  `blockType` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `blockName` (`blockName`)
+);
+
+INSERT INTO `language_en` VALUES 
+(1,'SMS_KEYWORD','keyword','Basic'),
+(2,'SUB_KEYWORD_GET_SERVICE_CODES','get_service_codes','SubKeyword'),
+(3,'SUB_KEYWORD_SUBMIT_REQUEST','submit_request','SubKeyword'),
+(4,'SUB_KEYWORD_CHECK_REQUEST_STATUS','check_request_status','SubKeyword'),
+(5,'SUB_KEYWORD_HELP','help','SubKeyword'),
+(6,'SUB_KEYWORD_MORE','more','SubKeyword'),
+(7,'GROUP_OPTIONS_PREFIX','g','GetServiceCodeInteractionMode'),
+(8,'SERVICE_OPTIONS_PREFIX','s','GetServiceCodeInteractionMode'),
+(9,'GROUP_LIST_INFO_TEXT_1','Reply "group code" to get list of services in that group;Groups:','GetServiceCodeInteractionMode'),
+(10,'GROUP_LIST_INFO_TEXT_2','Reply "more" to get more groups','GetServiceCodeInteractionMode'),
+(11,'GROUP_LIST_INFO_TEXT_3','Groups:','GetServiceCodeInteractionMode'),
+(12,'SERVICE_LIST_INFO_TEXT_1','Services:','GetServiceCodeInteractionMode'),
+(13,'SERVICE_LIST_INFO_TEXT_2','Reply "more" to get more services','GetServiceCodeInteractionMode'),
+(14,'SUCCESSFUL_REQUEST_SUBMISSION_TEXT','Your request has been successfully registered. Your service request id is:','SubmitRequestCodeInteractionMode'),
+(15,'UNSUCCESSFUL_REQUEST_SUBMISSION_TEXT','Your request was not registered. Please Retry','SubmitRequestCodeInteractionMode'),
+(16,'STRING_DATATYPE_RESPONSE_TEXT_1','Additional info required:','SubmitRequestCodeInteractionMode'),
+(17,'STRING_DATATYPE_RESPONSE_TEXT_2',';Reply with your answer','SubmitRequestCodeInteractionMode'),
+(18,'NUMBER_DATATYPE_RESPONSE_TEXT_1','Additional info required:','SubmitRequestCodeInteractionMode'),
+(19,'NUMBER_DATATYPE_RESPONSE_TEXT_2',';Reply with your answer','SubmitRequestCodeInteractionMode'),
+(20,'DATETIME_DATATYPE_RESPONSE_TEXT_1','Additional info required:','SubmitRequestCodeInteractionMode'),
+(21,'DATETIME_DATATYPE_RESPONSE_TEXT_2',';Reply with your answer','SubmitRequestCodeInteractionMode'),
+(22,'TEXT_DATATYPE_RESPONSE_TEXT_1','Additional info required:','SubmitRequestCodeInteractionMode'),
+(23,'TEXT_DATATYPE_RESPONSE_TEXT_2',';Reply with your answer','SubmitRequestCodeInteractionMode'),
+(24,'SINGLEVALUELIST_DATATYPE_RESPONSE_TEXT_1','Additional info required:','SubmitRequestCodeInteractionMode'),
+(25,'SINGLEVALUELIST_DATATYPE_RESPONSE_TEXT_2',';Reply with your answer','SubmitRequestCodeInteractionMode'),
+(26,'SINGLEVALUELIST_OPTIONS_PREFIX','i','SubmitRequestCodeInteractionMode'),
+(27,'MULTIVALUELIST_DATATYPE_RESPONSE_TEXT_1','Additional info required:','SubmitRequestCodeInteractionMode'),
+(28,'MULTIVALUELIST_DATATYPE_RESPONSE_TEXT_2',';Reply with the option code;Options:','SubmitRequestCodeInteractionMode'),
+(29,'MULTIVALUELIST_OPTIONS_PREFIX','m','SubmitRequestCodeInteractionMode'),
+(30,'REQUEST_STATUS','Request Status:','RequestStatusInteractionMode'),
+(31,'REQUEST_STATUS_INFO','Info:','RequestStatusInteractionMode'),
+(32,'REQUEST_STATUS_SERVICE_NOTICE','Service Notice:','RequestStatusInteractionMode'),
+(33,'MORE_OPTIONS_TEXT','Reply "more" to get more options','RequestStatusInteractionMode'),
+(34,'OPTIONS_TEXT','Options:','RequestStatusInteractionMode'),
+(35,'HELP_INTRO_PAGE','Reply "1" for help on getting service codes;"2" for help on submitting service request;"3" for help on checking service request status','HelpInteractionMode'),
+(36,'HELP_GET_SERVICE_CODES_GROUPS_PAGE_1','Reply "get_service_codes";You will get list of groups and their group codes.Examples of some group codes:g2,g3','HelpInteractionMode'),
+(37,'HELP_GET_SERVICE_CODES_SERVICES_PAGE_1','Reply "get_service_codes";You will get list of services and their service codes.Examples of some service codes:s23,s37','HelpInteractionMode'),
+(38,'HELP_SUBMIT_REQUEST_PAGE_1','Reply "submit_request<space>service code<space>location of service issue" to submit service request','HelpInteractionMode'),
+(39,'HELP_CHECK_REQUEST_STATUS_PAGE_1','Reply "check_request_status<space>service request id" to check request status','HelpInteractionMode'),
+(40,'SMS_ERROR_INCORRECT_RESPONSE','You have sent an incorrect response.Reply "help" to get help on sending SMS','Error'),
+(41,'SMS_ERROR_INCORRECT_QUERY','You have sent an incorrect query.Reply "help" to get help on sending SMS','Error'),
+(42,'SMS_ERROR_SERVER_PROBLEM','Our servers encountered a problem. Please try again later.','Error'),
+(43,'SMS_ERROR_INCORRECT_SERVICE_CODE','You have submitted an incorrect Service Code.Reply "get_service_codes" to get a list of service codes.','Error'),
+(44,'SMS_ERROR_SERVICE_CODE_NOT_PRESENT','No Service Code was present in your request.Reply "help"to get help on submitting Service Requests.','Error'),
+(45,'SMS_ERROR_INCORRECT_OPTION_CHOSEN','You have chosen an incorrect option.','Error'),
+(46,'SMS_ERROR_INVALID_SERVICE_REQUEST_ID','You have sent an incorrect Service Request Id','Error');
 
 CREATE TABLE `query_record` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
