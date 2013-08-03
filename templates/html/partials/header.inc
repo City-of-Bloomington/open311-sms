@@ -8,9 +8,10 @@
  	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
 	
 	<script>
-		var BaseURL="<?php echo BASE_URL;?>";
+		var BaseURI="<?php echo BASE_URI;?>";
 	</script>
-	<script src="<?php echo BASE_URL?>/js/textingSimulator.js"></script>
+
+	<script src="<?php echo BASE_URI;?>/js/textingSimulator.js"></script>
 
 	<title><?php echo $this->title ? View::escape($this->title) : APPLICATION_NAME; ?></title>
 </head>

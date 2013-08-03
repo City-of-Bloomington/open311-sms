@@ -14,10 +14,13 @@ if (preg_match('|'.BASE_URI.'(/([a-zA-Z0-9]+))?(/([a-zA-Z0-9]+))?|',$_SERVER['RE
 	$action   = isset($matches[4]) ? $matches[4] : 'index';
 }
 
-if($resource!='SMSinterface')
-	$template = !empty($_REQUEST['format'])? new Template('default',$_REQUEST['format']) : new Template('default');
-else
+if ($resource=='SMSinterface')
 	$template = !empty($_REQUEST['format'])? new Template('SMS',$_REQUEST['format']) : new Template('SMS',ConfigurationList::get('SMSResponseFormat'));
+else if (($resource=='simulator')&&($action=='getResponse'))
+	$template = !empty($_REQUEST['format'])? new Template('simulator',$_REQUEST['format']) : new Template('simulator');
+else
+	$template = !empty($_REQUEST['format'])? new Template('default',$_REQUEST['format']) : new Template('default');
+	
 // Execute the Controller::action()
 if (isset($resource) && isset($action) && $ZEND_ACL->has($resource)) {
 	$USER_ROLE = isset($_SESSION['USER']) ? $_SESSION['USER']->getRole() : 'Anonymous';

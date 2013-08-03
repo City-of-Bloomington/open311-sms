@@ -5,13 +5,14 @@ $(document).ready(function(){
 		$("#SMSResponse").html("<div>Loading...</div>");
 		$.ajax({
 			type:"GET",
-  			url: BaseURL+"/SMSinterface/",
-			data:{"From":"123","Body":SMSText},
+  			url: BaseURI+"/simulator/getResponse",
+			data:{"From":"123","Body":SMSText,"format":"html"},
 			success:function(data){
 				$("#SMSResponse").empty();
   				$("#SMSResponse").html(data);
   			},
 			error: function(){
+				$("#SMSResponse").empty();
 				alert("Oops!Something went wrong.");
 			}
 		});
