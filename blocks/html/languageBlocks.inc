@@ -21,9 +21,12 @@ $blockTypeList=LanguageBlockList::getTypeList($this->languageBlockList);
 		}
 		$html.= '</ul><p></p>';
 		$html.= '<div class="tab-content">';
+		$first=TRUE;
 		foreach ($blockTypeList as $type)
-		{
-			$html.='<div class="tab-pane active" id="'.$type.'">';
+		{	
+			$status=$first?'active':NULL;
+			$html.='<div class="tab-pane '.$status.'" id="'.$type.'">';
+			$first=FALSE;
 			foreach ($this->languageBlockList as $blockName=>$blockParam)
 			{
 				if($blockParam['blockType']==$type)
