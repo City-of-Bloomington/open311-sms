@@ -17,7 +17,7 @@ class LanguageController extends Controller
 	public function update()
 	{
 		$languageBlockList= new LanguageBlockList;
-		if (isset($_POST['SMS_KEYWORD'])) 
+		if (isset($_POST['SUB_KEYWORD_GET_SERVICE_CODES'])) 
 		{
 			$languageBlockList->handleUpdate($_POST);
 			try {

@@ -5,26 +5,40 @@
  * @author Abhiroop Bhatnagar <bhatnagarabhiroop@gmail.com>
  * @param language $this->languageBlockList
  */
-
+$blockTypeList=LanguageBlockList::getTypeList($this->languageBlockList);
 ?>
 
 
 <div class="container">
 	<h2>Language Editor</h2>
 	<form method="post" action="<?php echo $_SERVER['REDIRECT_URL']; ?>" class='form-horizontal'>
-		<fieldset><legend>Configuration</legend>
-
+		<fieldset>
 		<?php
-		$html = ""; 
-		foreach ($this->languageBlockList as $blockName=>$blockValue)
+		$html = '<ul class="nav nav-tabs">';
+		foreach ($blockTypeList as $type)
 		{
-			$html.='<div class="form-group">
-				      <label for="'.$blockName.'" class="col-lg-4 control-label">'.$blockName.'</label>
-				      <div class="col-lg-7">
-				      <input name="'.$blockName.'" class="form-control" id="'.$blockName.'" value="'.View::escape($blockValue).'" />
-				      </div>
-	      		      </div>';
+			$html.='<li><a href="#'.$type.'" data-toggle="tab">'.$type.'</a></li>';
 		}
+		$html.= '</ul><p></p>';
+		$html.= '<div class="tab-content">';
+		foreach ($blockTypeList as $type)
+		{
+			$html.='<div class="tab-pane active" id="'.$type.'">';
+			foreach ($this->languageBlockList as $blockName=>$blockParam)
+			{
+				if($blockParam['blockType']==$type)
+				{
+					$html.='<div class="form-group">
+					         <label for="'.$blockName.'" class="col-lg-4 control-label">'.$blockName.'</label>
+					         <div class="col-lg-7">
+					          <input name="'.$blockName.'" class="form-control" id="'.$blockName.'" value="'.View::escape($blockParam['blockValue']).'" />
+					         </div>
+		      		               </div>';
+				}
+			}
+			$html.='</div>';
+		}
+		$html.='</div>';				
 		echo $html;
 		?>		
 

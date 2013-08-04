@@ -10,11 +10,11 @@ class LanguageBlockList
 	public function __construct()
 	{	
 		$zend_db = Database::getConnection();
-		$result=$zend_db->query('SELECT blockName, blockValue FROM language_'.ConfigurationList::get('language'));
+		$result=$zend_db->query('SELECT blockName, blockValue, blockType FROM language_'.ConfigurationList::get('language'));
 		$result=$result->fetchAll();
-		foreach($result as $config)
+		foreach($result as $row)
 		{
-			$this->languageBlockList[$config['blockName']]=$config['blockValue'];
+			$this->languageBlockList[$row['blockName']]=array('blockValue'=>$row['blockValue'],'blockType'=>$row['blockType']);
 		}		
 	}
 	public static function get($languageBlockName)
@@ -24,8 +24,7 @@ class LanguageBlockList
 	}
 	public function getArray()
 	{
-		$list=new LanguageBlockList;
-		return $list->languageBlockList;
+		return $this->languageBlockList;
 	}
 	public function set($blockName,$blockValue)
 	{
@@ -35,15 +34,37 @@ class LanguageBlockList
 		$zend_db->update('language_'.ConfigurationList::get('language'), $data, $blockName);
 	}
 	public function handleUpdate($post)
-	{
-		
+	{		
 		$fields = array_keys(self::getArray());
-		foreach ($fields as $field) {
-			if (isset($post[$field])) {
+		foreach ($fields as $field) 
+		{
+			if (isset($post[$field])) 
+			{
 				self::set($field,$post[$field]);
 			}
 		}
 	}
-	
+	public static function initializeConstants()
+	{
+		$list=new LanguageBlockList;
+		$list=$list->getArray();
+		define('SMS_KEYWORD',ConfigurationList::get('SMSKeyword'));
+		foreach($list as $blockName=>$blockParam)
+		{
+			define($blockName,$blockParam['blockValue']);
+		}
+	}
+	public static function getTypeList($listArray)
+	{
+		$blockTypeList=array();
+		foreach ($listArray as $block)
+		{
+			if (!in_array($block['blockType'],$blockTypeList))
+			{	
+				$blockTypeList[]=$block['blockType'];
+			}
+		}
+		return $blockTypeList;
+	}	
 }
 ?>
