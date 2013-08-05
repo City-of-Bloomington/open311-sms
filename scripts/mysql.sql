@@ -94,7 +94,8 @@ INSERT INTO `language_en` VALUES
 (42,'SMS_ERROR_INCORRECT_SERVICE_CODE','You have submitted an incorrect Service Code.Reply "get_service_codes" to get a list of service codes.','Error'),
 (43,'SMS_ERROR_SERVICE_CODE_NOT_PRESENT','No Service Code was present in your request.Reply "help"to get help on sumitting Service Requests.','Error'),
 (44,'SMS_ERROR_INCORRECT_OPTION_CHOSEN','You have chosen an incorrect option.','Error'),
-(45,'SMS_ERROR_INVALID_SERVICE_REQUEST_ID','You have sent an incorrect Service Request Id','Error');
+(45,'SMS_ERROR_INVALID_SERVICE_REQUEST_ID','You have sent an incorrect Service Request Id','Error'),
+(46,'SMS_ERROR_NO_SERVICE_REQUEST_ID_PRESENT','No Service Request Id was present in your request.Reply"help"to get help on checking request status.','Error');
 
 CREATE TABLE `query_record` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,

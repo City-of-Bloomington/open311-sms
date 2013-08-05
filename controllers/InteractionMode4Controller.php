@@ -50,10 +50,10 @@ class InteractionMode4Controller extends SMSController
 				default:
 				{
 					$_SESSION['SMSErrorMessage'][]=SMS_ERROR_INCORRECT_RESPONSE;
+					return;
 				}
 			}
-		}
-		
+		}		
 		QueryRecord::save($previousQuery['interaction_mode'],($previousQuery['previous_page']+1),$pageInfo);
 		$this->template->smsBlocks=$responseSMS;
 	}

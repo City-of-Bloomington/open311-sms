@@ -53,6 +53,7 @@ class InteractionMode1Controller extends SMSController
 			else
 			{
 				$_SESSION['SMSErrorMessage'][]=SMS_ERROR_INCORRECT_RESPONSE;
+				return;
 			}
 			
 		}
@@ -67,6 +68,7 @@ class InteractionMode1Controller extends SMSController
 		else
 		{
 			$_SESSION['SMSErrorMessage'][]=SMS_ERROR_INCORRECT_RESPONSE;
+			return;
 		}
 	}	
 	private static function findGroupNumber($string)

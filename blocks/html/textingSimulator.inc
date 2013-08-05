@@ -18,7 +18,13 @@
 <p></p>
 <div class="panel">
 	<div class="panel-heading">Response:</div>
-	<div id="SMSResponse"></div>		
+	<div id="SMSResponse"></div>	
 </div>
+<p></p>
+<div class="panel">
+	<div class="panel-heading">Count:</div>
+	<div id="SMSResponseCount"></div>	
+</div>
+
 
 

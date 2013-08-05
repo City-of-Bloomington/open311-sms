@@ -95,7 +95,7 @@ class IncomingSMS
 		$serviceCodeIndex=2;
 		if(ConfigurationList::get('useSMSKeyword')=='No') {-- $serviceCodeIndex; }
 		if(is_null(self::getSubkeyword())) {-- $serviceCodeIndex; }
-		if(preg_match('/^'.SERVICE_OPTIONS_PREFIX.'[0-9]*$/i',$this->smsBodyPieces[$serviceCodeIndex],$matches))	
+		if((isset($this->smsBodyPieces[$serviceCodeIndex]))&&(preg_match('/^'.SERVICE_OPTIONS_PREFIX.'[0-9]*$/i',$this->smsBodyPieces[$serviceCodeIndex],$matches)))
 		{
 			return $this->smsBodyPieces[$serviceCodeIndex];
 		}

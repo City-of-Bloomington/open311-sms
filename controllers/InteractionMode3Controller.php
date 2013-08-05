@@ -18,6 +18,11 @@ class InteractionMode3Controller extends SMSController
 	{
 		$incomingSMS=new IncomingSMS;
 		$serviceRequestId=$incomingSMS->getQueryText();
+		if (!(isset($serviceRequestId)))
+		{
+			$_SESSION['SMSErrorMessage'][]=SMS_ERROR_NO_SERVICE_REQUEST_ID_PRESENT;
+			return;
+		}
 		$xmlurlServiceRequest = file_get_contents($this->endpoint.'/requests/'.$serviceRequestId.'.xml');    
 		$xmlServiceRequest = simplexml_load_string($xmlurlServiceRequest, null, LIBXML_NOCDATA);
 		$request=$xmlServiceRequest->request;
@@ -27,6 +32,7 @@ class InteractionMode3Controller extends SMSController
 				$_SESSION['SMSErrorMessage'][]=SMS_ERROR_INVALID_SERVICE_REQUEST_ID;
 			else 
 				$_SESSION['SMSErrorMessage'][]=SMS_ERROR_INCORRECT_QUERY;
+			return;	
 		}
 		$responseSMS['head']=REQUEST_STATUS;
 		$responseSMS['head'].=$request->status;
@@ -47,5 +53,6 @@ class InteractionMode3Controller extends SMSController
 	{
 		//This mode does not handle Reply SMS. Therefore, any reply SMS should be considered an Incorrect Response
 		$_SESSION['SMSErrorMessage'][]=SMS_ERROR_INCORRECT_QUERY;
+		return;
 	}
 }

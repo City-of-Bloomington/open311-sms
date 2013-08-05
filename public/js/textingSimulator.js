@@ -10,6 +10,7 @@ $(document).ready(function(){
 			success:function(data){
 				$("#SMSResponse").empty();
   				$("#SMSResponse").html(data);
+				$("#SMSResponseCount").html($("#SMSResponse").val().length);
   			},
 			error: function(){
 				$("#SMSResponse").empty();

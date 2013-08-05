@@ -23,12 +23,14 @@ class InteractionMode2Controller extends SMSController
 		if(!$serviceCode)
 		{
 			$_SESSION['SMSErrorMessage'][]=SMS_ERROR_SERVICE_CODE_NOT_PRESENT;
+			return;
 		}		
 		$list=ServiceList::getServiceList($this->xmlServiceList);
 		$serviceNumber=self::findServiceNumber($serviceCode);		
 		if(!isset($list[$serviceNumber]))
 		{	
 			$_SESSION['SMSErrorMessage'][]=SMS_ERROR_INCORRECT_SERVICE_CODE;
+			return;
 		}
 		$fields=array();
 		$fields['service_code']=$serviceNumber;
@@ -65,6 +67,7 @@ class InteractionMode2Controller extends SMSController
 			else
 			{
 				$_SESSION['SMSErrorMessage'][]=SMS_ERROR_SERVER_PROBLEM;
+				return;
 			}
 			$page='attribute0 page'.$pageNumber;
 			QueryRecord::save(2,$page,$responseSMS[1]);			
@@ -82,6 +85,7 @@ class InteractionMode2Controller extends SMSController
 		else
 		{
 			$_SESSION['SMSErrorMessage'][]=SMS_ERROR_INCORRECT_RESPONSE;
+			return;
 		}
 		if(preg_match('/^attribute([0-9]*) page([0-9]*)$/',$previousQuery['previous_page'],$matches))
 		{
@@ -90,6 +94,7 @@ class InteractionMode2Controller extends SMSController
 		else
 		{
 			$_SESSION['SMSErrorMessage'][]=SMS_ERROR_INCORRECT_RESPONSE;
+			return;
 		}	
 		$xmlurlServiceDefinition = file_get_contents($this->endpoint.'/services/'.$serviceNumber.'.xml');    
 		$xmlServiceDefinition = simplexml_load_string($xmlurlServiceDefinition, null, LIBXML_NOCDATA);
@@ -113,6 +118,7 @@ class InteractionMode2Controller extends SMSController
 				else
 				{
 					$_SESSION['SMSErrorMessage'][]=SMS_ERROR_INCORRECT_OPTION_CHOSEN;
+					return;
 				}	
 				$attributeKeyChosen=self::findAttributeKeyChosen($attributeList[$incomingAttributeOrder],$attributeValueNumber);
 				$fields['attribute['.$attributeCode.']']=$attributeKeyChosen;
@@ -129,6 +135,7 @@ class InteractionMode2Controller extends SMSController
 				else
 				{
 					$_SESSION['SMSErrorMessage'][]=SMS_ERROR_INCORRECT_OPTION_CHOSEN;
+					return;
 				}	
 				foreach($attributeValueNumbers as $attributeValueNumber)
 				{
@@ -149,7 +156,10 @@ class InteractionMode2Controller extends SMSController
 			$previousPage=$matches[2];			
 			$pageNumber=$previousPage+1;	
 			if($pageNumber>count($metadataResponse))
+			{
 				$_SESSION['SMSErrorMessage'][]=SMS_ERROR_INCORRECT_RESPONSE;
+				return;
+			}			
 			$nextAttributeNumber=$incomingAttributeOrder;		
 			$responseSMS=$metadataResponse['page'.$pageNumber];
 			$page='attribute'.$nextAttributeNumber.' page'.$pageNumber;
@@ -169,6 +179,7 @@ class InteractionMode2Controller extends SMSController
 			else
 			{
 				$_SESSION['SMSErrorMessage'][]=SMS_ERROR_SERVER_PROBLEM;
+				return;
 			}					
 		}
 		else
