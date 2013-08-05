@@ -9,6 +9,7 @@
 	
 	<script>
 		var BaseURI="<?php echo BASE_URI;?>";
+		var SMSCharacterLimit=<?php echo ConfigurationList::get('SMSCharacterLimit');?>;
 	</script>
 
 	<script src="<?php echo BASE_URI;?>/js/textingSimulator.js"></script>

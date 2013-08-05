@@ -5,12 +5,26 @@ $(document).ready(function(){
 		$("#SMSResponse").html("<div>Loading...</div>");
 		$.ajax({
 			type:"GET",
+			dataType: "xml",
   			url: BaseURI+"/simulator/getResponse",
-			data:{"From":"123","Body":SMSText,"format":"html"},
-			success:function(data){
+			async: true,
+			data:{"From":"123","Body":SMSText,"format":"xml"},
+			success:function(xml){
 				$("#SMSResponse").empty();
+				var data = $('Sms',xml).text();
   				$("#SMSResponse").html(data);
-				$("#SMSResponseCount").html($("#SMSResponse").val().length);
+				var responseLength=$.trim($("#SMSResponse").html()).length;
+				$("#SMSResponseCount").html(responseLength);
+				if(responseLength>SMSCharacterLimit)
+				{
+					$("#countPanel").addClass("panel-danger");
+					$("#responsePanel").addClass("panel-danger");
+				}
+				else
+				{
+					$("#countPanel").addClass("panel-success");
+					$("#responsePanel").addClass("panel-success");
+				}
   			},
 			error: function(){
 				$("#SMSResponse").empty();

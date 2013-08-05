@@ -16,12 +16,12 @@
 <button id="Submit" class="btn btn-primary">Submit</button>
 </form>
 <p></p>
-<div class="panel">
+<div class="panel" id="responsePanel">
 	<div class="panel-heading">Response:</div>
 	<div id="SMSResponse"></div>	
 </div>
 <p></p>
-<div class="panel">
+<div class="panel" id="countPanel">
 	<div class="panel-heading">Count:</div>
 	<div id="SMSResponseCount"></div>	
 </div>
