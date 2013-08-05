@@ -3,6 +3,7 @@ $(document).ready(function(){
 		var From=$("#SMSFrom").val();
 		var SMSText=$("#SMSText").val();
 		$("#SMSResponse").html("<div>Loading...</div>");
+		$("#SMSResponseCount").html("<div>Loading...</div>");
 		$.ajax({
 			type:"GET",
 			dataType: "xml",
@@ -28,6 +29,7 @@ $(document).ready(function(){
   			},
 			error: function(){
 				$("#SMSResponse").empty();
+				$("#SMSResponseCount").empty();
 				alert("Oops!Something went wrong.");
 			}
 		});
