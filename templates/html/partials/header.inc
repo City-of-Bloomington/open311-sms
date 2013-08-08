@@ -3,7 +3,7 @@
 	
  	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css">
 
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
 </script>
  	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
 	
