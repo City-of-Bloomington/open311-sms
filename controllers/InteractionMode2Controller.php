@@ -38,7 +38,7 @@ class InteractionMode2Controller extends SMSController
 		$fields['phone']=$incomingSMS->getFrom();
 		
 		// Ask for description
-		$responseSMS['head']='REPLY_WITH_DESCRIPTION';
+		$responseSMS['head']=REPLY_WITH_DESCRIPTION;
 		$fieldString=self::constructFieldString($fields);
 		QueryRecord::save(2,'description',$fieldString);
 		$this->template->smsBlocks=$responseSMS;
@@ -84,7 +84,9 @@ class InteractionMode2Controller extends SMSController
 			$fields['description']=$incomingSMS->getQueryText();
 			$fieldString=self::constructFieldString($fields,$fieldString);
 		}
-		else if($incomingSMS->getSubKeyword()!=SUB_KEYWORD_MORE)
+		else if(($incomingSMS->getSubKeyword()!=SUB_KEYWORD_MORE)&&
+				!(($incomingSMS->getSubKeyword()==SUB_KEYWORD_SKIP)&&
+					$attributeList[$incomingAttributeOrder]['required']=='false'))
 		{	
 			/**
 			 * The user has replied with value for an attribute.
@@ -129,7 +131,13 @@ class InteractionMode2Controller extends SMSController
 				$fields['attribute['.$attributeCode.']']=$incomingSMS->getQueryText();
 				$fieldString=self::constructFieldString($fields,$fieldString);
 			}
-		}	
+		}
+		else if (($incomingSMS->getSubKeyword()==SUB_KEYWORD_SKIP)&&
+					$attributeList[$incomingAttributeOrder]['required']=='true')
+		{
+			$_SESSION['SMSErrorMessage'][]=SMS_ERROR_CANNOT_SKIP_REQUIRED_FIELD;
+			return;
+		}
 		/**
 		 * Now we need to construct responseSMS	
 		 */

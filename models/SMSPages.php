@@ -77,7 +77,7 @@ class SMSPages
 			}
 			self::removeIfLastPageNotRequired($pages,$pageNumber,$characterCount);			
 		}
-		$pages['page'.$pageNumber]['tail']='';	
+		$pages['page'.$pageNumber]['tail']=($attributeProperties['required']=='false')?REPLY_TO_SKIP:'';	
 		return $pages;
 	}
 	public static function returnHelpPages($interactionMode,$pageNumber)
@@ -124,8 +124,11 @@ class SMSPages
 				if(($key!='head')&&($key!='tail'))
 					$secondLastPageOptionsLength=$secondLastPageOptionsLength+strlen(htmlspecialchars_decode($value));
 			}
-			if(($lastPageOptionsLength+$secondLastPageOptionsLength+
-				strlen(htmlspecialchars_decode($pages['page'.($lastPage-1)]['head'])))<=(int)ConfigurationList::get('SMSCharacterLimit'))
+			if(($lastPageOptionsLength+
+			$secondLastPageOptionsLength+
+			strlen(htmlspecialchars_decode($pages['page'.$lastPage]['tail']))+
+			strlen(htmlspecialchars_decode($pages['page'.($lastPage-1)]['head'])))
+				<=(int)ConfigurationList::get('SMSCharacterLimit'))
 			{
 				$optionsCount=count($pages['page'.($lastPage-1)])-2;
 				foreach($pages['page'.($lastPage)] as $key=>$value)
@@ -136,6 +139,7 @@ class SMSPages
 						++$optionsCount;
 					}
 				}
+				$pages['page'.($lastPage-1)]['tail']=$pages['page'.($lastPage)]['tail'];
 				$pages['page'.$lastPage]=NULL;	
 				--$lastPage;
 			}	

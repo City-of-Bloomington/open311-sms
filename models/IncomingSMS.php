@@ -70,7 +70,6 @@ class IncomingSMS
 		}
 		return $interactionMode;
 	}
-
 	public function getSubKeyword()
 	{
 		$SubKeywordIndex=1;		
@@ -86,10 +85,10 @@ class IncomingSMS
 			case SUB_KEYWORD_CHECK_REQUEST_STATUS:{return SUB_KEYWORD_CHECK_REQUEST_STATUS;}	
 			case SUB_KEYWORD_HELP                :{return SUB_KEYWORD_HELP;}
 			case SUB_KEYWORD_MORE                :{return SUB_KEYWORD_MORE;}
+			case SUB_KEYWORD_SKIP 		     :{return SUB_KEYWORD_SKIP;}
 			default 			     :{return NULL;}	
 		}
-	}
-	
+	}	
 	public function getServiceCode()	
 	{
 		$serviceCodeIndex=2;
