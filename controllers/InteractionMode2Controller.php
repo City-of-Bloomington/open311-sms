@@ -36,42 +36,11 @@ class InteractionMode2Controller extends SMSController
 		$fields['service_code']=$serviceNumber;
 		$fields['address_string']=$incomingSMS->getQueryText();
 		$fields['phone']=$incomingSMS->getFrom();
-				
-		if(ServiceList::isMetadataPresent($this->xmlServiceList,$serviceNumber))
-		{
-			/**
-			 * If metadata is present, the information will be saved in form of Request string 
-			 * and Response SMS will ask for information about the metadata.
-			 */	
-			$xmlurlServiceDefinition = file_get_contents($this->endpoint.'/services/'.$serviceNumber.'.xml');    
-			$xmlServiceDefinition = simplexml_load_string($xmlurlServiceDefinition, null, LIBXML_NOCDATA);
-			$attributeList=self::getAttributeList($xmlServiceDefinition);
-			$fieldString=self::constructFieldString($fields);
-			$page='attribute1 page'.$pageNumber;
-			QueryRecord::save(2,$page,$fieldString);
-			$metadataResponse=SMSPages::constructMetadataResponsePages($attributeList,1);
-			$responseSMS=$metadataResponse['page'.$pageNumber];			
-		}
-		else
-		{	
-			/**
-			 * Post request if no metadata is present
-			 */
-			$serverResponse=self::postRequest($fields);
-			if($serverResponse)
-			{			
-				$xmlServiceRequest = simplexml_load_string($serverResponse);
-				$responseSMS['head']=SUCCESSFUL_REQUEST_SUBMISSION_TEXT;
-				$responseSMS[1]=(string)$xmlServiceRequest->request->service_request_id;
-			}
-			else
-			{
-				$_SESSION['SMSErrorMessage'][]=SMS_ERROR_SERVER_PROBLEM;
-				return;
-			}
-			$page='attribute0 page'.$pageNumber;
-			QueryRecord::save(2,$page,$responseSMS[1]);			
-		}
+		
+		// Ask for description
+		$responseSMS['head']='REPLY_WITH_DESCRIPTION';
+		$fieldString=self::constructFieldString($fields);
+		QueryRecord::save(2,'description',$fieldString);
 		$this->template->smsBlocks=$responseSMS;
 	}
 	public function handleReplySMS()
@@ -87,7 +56,11 @@ class InteractionMode2Controller extends SMSController
 			$_SESSION['SMSErrorMessage'][]=SMS_ERROR_INCORRECT_RESPONSE;
 			return;
 		}
-		if(preg_match('/^attribute([0-9]*) page([0-9]*)$/',$previousQuery['previous_page'],$matches))
+		if ($previousQuery['previous_page']=='description')
+		{
+			$incomingAttributeOrder=0;
+		}
+		else if(preg_match('/^attribute([0-9]*) page([0-9]*)$/',$previousQuery['previous_page'],$matches))
 		{
 			$incomingAttributeOrder=$matches[1]; //Order of Attribute whose response is in Incoming SMS
 		}
@@ -99,12 +72,19 @@ class InteractionMode2Controller extends SMSController
 		$xmlurlServiceDefinition = file_get_contents($this->endpoint.'/services/'.$serviceNumber.'.xml');    
 		$xmlServiceDefinition = simplexml_load_string($xmlurlServiceDefinition, null, LIBXML_NOCDATA);
 		$attributeList=self::getAttributeList($xmlServiceDefinition);
-		$attributeCode=$attributeList[$incomingAttributeOrder]['code'];
-
+		if ($previousQuery['previous_page']!='description')
+		{
+			$attributeCode=$attributeList[$incomingAttributeOrder]['code'];
+		}
 		$fieldString=$previousQuery['additional_info'];
 		$fields=array();
 		
-		if($incomingSMS->getSubKeyword()!=SUB_KEYWORD_MORE)
+		if ($previousQuery['previous_page']=='description')
+		{
+			$fields['description']=$incomingSMS->getQueryText();
+			$fieldString=self::constructFieldString($fields,$fieldString);
+		}
+		else if($incomingSMS->getSubKeyword()!=SUB_KEYWORD_MORE)
 		{	
 			/**
 			 * The user has replied with value for an attribute.
@@ -149,7 +129,10 @@ class InteractionMode2Controller extends SMSController
 				$fields['attribute['.$attributeCode.']']=$incomingSMS->getQueryText();
 				$fieldString=self::constructFieldString($fields,$fieldString);
 			}
-		}		
+		}	
+		/**
+		 * Now we need to construct responseSMS	
+		 */
 		if($incomingSMS->getSubKeyword()==SUB_KEYWORD_MORE)
 		{
 			$metadataResponse=SMSPages::constructMetadataResponsePages($attributeList,$incomingAttributeOrder);
