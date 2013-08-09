@@ -61,6 +61,7 @@ class SMSPages
 			{
 				$smsBlock=self::optimize(constant($datatype.'_OPTIONS_PREFIX').$j.'-'.$value.';');
 				$characterCount=$characterCount+strlen(htmlspecialchars_decode($smsBlock));
+				// Go to next page if characterCount increases about Character Limit
 				if($characterCount>=(int)ConfigurationList::get('SMSCharacterLimit'))
 				{
 					$pageNumber++;
@@ -72,12 +73,32 @@ class SMSPages
 					$characterCount=$characterCount+strlen(htmlspecialchars_decode($smsBlock));
 					$i=1;	
 				}
-				$pages['page'.$pageNumber][++$i] = $smsBlock;  
+				$pages['page'.$pageNumber][$i] = $smsBlock;  
+				++$i;
 				++$j;
 			}
-			self::removeIfLastPageNotRequired($pages,$pageNumber,$characterCount);			
+			$lastPageCharacterCount=$characterCount;
+			$lastPageTail=($attributeProperties['required']=='false')?REPLY_TO_SKIP:'';
+			if ($characterCount
+				-strlen(htmlspecialchars_decode($pages['page'.$pageNumber]['tail']))
+				+strlen(htmlspecialchars_decode($lastPageTail))
+					>=(int)ConfigurationList::get('SMSCharacterLimit'))
+			{
+				$pageNumber++;
+				$pages['page'.$pageNumber] = array();
+				$pages['page'.$pageNumber]['head'] = $lastPageTail;
+				$tailAdded=TRUE;
+			}	
+			else
+			{		
+				self::removeIfLastPageNotRequired($pages,$pageNumber,$lastPageCharacterCount);
+				$tailAdded=FALSE;	
+			}
 		}
-		$pages['page'.$pageNumber]['tail']=($attributeProperties['required']=='false')?REPLY_TO_SKIP:'';	
+		if (!$tailAdded)
+		{
+			$pages['page'.$pageNumber]['tail']=($attributeProperties['required']=='false')?REPLY_TO_SKIP:'';
+		}	
 		return $pages;
 	}
 	public static function returnHelpPages($interactionMode,$pageNumber)
