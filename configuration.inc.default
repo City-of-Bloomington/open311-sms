@@ -29,6 +29,16 @@ define('FRAMEWORK',APPLICATION_HOME.'/libraries/framework');
 define('ZEND',APPLICATION_HOME.'/libraries/ZendFramework/library');
 
 /**
+ * Location of Bootstrap Library
+ */
+define('BOOTSTRAP','https://netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1');
+
+/**
+ * Location of jQuery Library
+ */
+define('JQUERY','https://ajax.googleapis.com/ajax/libs/jquery/1.10.2');
+
+/**
  * Used when there's an error on the site.  The Framework will
  * print out a nice error message, encouraging users to report any problems
  * See: FRAMEWORK/ITSFunctions.inc

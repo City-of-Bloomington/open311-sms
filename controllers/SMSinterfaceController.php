@@ -44,11 +44,15 @@ class SMSinterfaceController extends Controller
 		}
 		if(isset($interactionMode))
 			$resource='InteractionMode'.$interactionMode;
-	
-		$xmlurlServiceDiscovery = file_get_contents(ConfigurationList::get('serviceDiscoveryURL'));    
-		$xmlServiceDiscovery = simplexml_load_string($xmlurlServiceDiscovery, null, LIBXML_NOCDATA);
+		
+		$xmlurlServiceDiscovery = @file_get_contents(ConfigurationList::get('serviceDiscoveryURL'));  
 		if(!$xmlurlServiceDiscovery)
-			$_SESSION['SMSErrorMessage'][] = SMS_ERROR_SERVER_PROBLEM;
+		{
+			$_SESSION['SMSErrorMessage'][] = SMS_ERROR_SERVER_PROBLEM;  
+			return;
+		}		
+		$xmlServiceDiscovery = simplexml_load_string($xmlurlServiceDiscovery, null, LIBXML_NOCDATA);
+		
 
 		//Find the valid and active endpoint from Service Discovery
 		foreach ($xmlServiceDiscovery->endpoints->endpoint as $endpoint) 

@@ -1,11 +1,11 @@
 <head>
 	<meta charset="utf-8" />
 	
- 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css">
+ 	<link rel="stylesheet" href="<?php echo BOOTSTRAP;?>/css/bootstrap.min.css">
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+	<script src="<?php echo JQUERY;?>/jquery.min.js">
 </script>
- 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
+ 	<script src="<?php echo BOOTSTRAP;?>/js/bootstrap.min.js"></script>
 	
 	<script>
 		var BaseURI="<?php echo BASE_URI;?>";
