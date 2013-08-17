@@ -45,8 +45,7 @@ $blockTypeList=LanguageBlockList::getTypeList($this->languageBlockList);
 		echo $html;
 		?>		
 
-		<fieldset><legend>Submit</legend>
-			<button type="submit" class="btn btn-primary">Submit</button>
+		<button type="submit" class="btn btn-primary">Submit</button>
 			<?php
 				if (isset($_REQUEST['return_url'])) {
 					$return_url = urlencode($_REQUEST['return_url']);
@@ -57,9 +56,8 @@ $blockTypeList=LanguageBlockList::getTypeList($this->languageBlockList);
 				}
 
 				$onclick = isset($_REQUEST['callback'])	? 'onclick="self.close();"': '';
-				echo "<a class=\"cancel\" href=\"$return_url\" $onclick>Cancel</a>";
+				echo "<a class=\"btn btn-default\" href=\"$return_url\" $onclick>Cancel</a>";
 			?>
-		</fieldset>
 	</form>
 </div>
 <p></p>

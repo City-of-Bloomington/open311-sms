@@ -7,14 +7,13 @@
  */
 ?>
 <div class="interfaceBox">
-	<h2>User Accounts
+	<h2>User Accounts</h2>
 		<?php
 			if (userIsAllowed('users')) {
-				echo "<a class=\"add button\" href=\"".BASE_URL."/users/update\">Add Account</a>";
+				echo "</br><a class=\"add button\" href=\"".BASE_URL."/users/update\">Add Account</a>";
 			}
 		?>
-	</h2>
-	<table>
+	<table class="table table-hover">
 		<thead>
 			<tr><th></th>
 				<th>Username</th>

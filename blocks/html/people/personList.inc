@@ -14,7 +14,7 @@
 			}
 		?>
 	</h2>
-	<table>
+	<table class="table">
 		<thead>
 			<tr><th></th>
 				<th>Username</th>

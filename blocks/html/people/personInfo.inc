@@ -18,7 +18,7 @@ $name = View::escape($this->person->getFullname());
 echo <<<EOT
 <div class="personInfo">
 	<h2>$name</h2>
-	<table>
+	<table class="table">
 		<tr><th>Email</th>
 			<td>{$this->person->getEmail()}</td>
 		</tr>

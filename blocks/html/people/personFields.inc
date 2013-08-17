@@ -11,16 +11,21 @@ foreach ($fields as $field) {
 	$$field = View::escape($this->person->$get());
 }
 ?>
-<table>
-	<tr><td><label for="firstname" class="required">Firstname</label></td>
-		<td><input name="firstname" id="firstname" value="<?php echo $firstname; ?>" /></td>
-	</tr>
-
-	<tr><td><label for="lastname" class="required">Lastname</label></td>
-		<td><input name="lastname" id="lastname" value="<?php echo $lastname; ?>" /></td>
-	</tr>
-
-	<tr><td><label for="email">Email</label></td>
-		<td><input name="email" id="email" value="<?php echo $email; ?>" /></td>
-	</tr>
-</table>
+<div class='form-group'>
+			<label for="firstname" class="required col-lg-2 control-label">Firstname</label>
+			<div class='col-lg-10'>
+			<input name="firstname" class="form-control" id="firstname" value="<?php echo $firstname; ?>" />
+			</div>
+</div>
+<div class='form-group'>
+			<label for="lastname" class="required col-lg-2 control-label">Lastname</label>
+			<div class='col-lg-10'>
+			<input name="lastname" class="form-control" id="lastname" value="<?php echo $lastname; ?>" />
+			</div>
+</div>
+<div class='form-group'>
+			<label for="email" class="required col-lg-2 control-label">Email</label>
+			<div class='col-lg-10'>
+			<input name="email" class="form-control" id="email" value="<?php echo $email; ?>" />
+			</div>
+</div>

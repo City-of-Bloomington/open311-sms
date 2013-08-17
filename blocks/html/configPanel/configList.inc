@@ -144,7 +144,7 @@
 				}
 
 				$onclick = isset($_REQUEST['callback'])	? 'onclick="self.close();"': '';
-				echo "<a class=\"cancel\" href=\"$return_url\" $onclick>Cancel</a>";
+				echo "<a class=\"btn btn-default\" href=\"$return_url\" $onclick>Cancel</a>";
 			?>
 		</fieldset>
 	</form>
