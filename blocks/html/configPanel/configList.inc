@@ -74,7 +74,7 @@
 		</div>	
 					
 		<div class='form-group'>
-			<label for="SMSResponseFormat" class="col-lg-2 control-label">SMSResponseFormat</label>
+			<label for="SMSResponseFormat" class="col-lg-2 control-label">SMS Response Format</label>
 			<div class='col-lg-10'>	
 				<label class="radio-inline">
 					<input type="radio" name="SMSResponseFormat" id="html" value="html" <?php  if(View::escape($this->configurationList['SMSResponseFormat'])=='html') echo 'checked' ;?>>HTML
