@@ -22,7 +22,7 @@
 </div>
 <p></p>
 <div class="panel" id="countPanel">
-	<div class="panel-heading">Count:</div>
+	<div class="panel-heading" id="countHeading" >Character Count:</div>
 	<div id="SMSResponseCount"></div>	
 </div>
 

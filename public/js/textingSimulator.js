@@ -16,15 +16,21 @@ $(document).ready(function(){
   				$("#SMSResponse").html(data);
 				var responseLength=$.trim($("#SMSResponse").html()).length;
 				$("#SMSResponseCount").html(responseLength);
+				$("#countPanel").removeClass("panel-danger");
+				$("#responsePanel").removeClass("panel-danger");
+				$("#countPanel").removeClass("panel-success");
+				$("#responsePanel").removeClass("panel-success");
 				if(responseLength>SMSCharacterLimit)
 				{
 					$("#countPanel").addClass("panel-danger");
 					$("#responsePanel").addClass("panel-danger");
+					$("#countHeading").html("Character Count is more than SMS character limit");
 				}
 				else
 				{
 					$("#countPanel").addClass("panel-success");
 					$("#responsePanel").addClass("panel-success");
+					$("#countHeading").html("Character Count:");
 				}
   			},
 			error: function(){
