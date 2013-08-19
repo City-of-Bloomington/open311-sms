@@ -10,7 +10,7 @@ CREATE TABLE `configuration` (
   UNIQUE KEY `configName` (`configName`)
 );
 
-INSERT INTO `configuration` VALUES 
+INSERT INTO `configuration` VALUES
 (1,'serviceDiscoveryURL','https://api.city.gov/discovery.xml'),
 (2,'open311APIKey','open311_api_key'),
 (3,'open311JurisdictionId','api.city.gov'),
@@ -49,7 +49,7 @@ CREATE TABLE `language_en` (
   UNIQUE KEY `blockName` (`blockName`)
 );
 
-INSERT INTO `language_en` VALUES 
+INSERT INTO `language_en` VALUES
 (1,'SUB_KEYWORD_GET_SERVICE_CODES','get_service_codes','SubKeyword'),
 (2,'SUB_KEYWORD_SUBMIT_REQUEST','submit_request','SubKeyword'),
 (3,'SUB_KEYWORD_CHECK_REQUEST_STATUS','check_request_status','SubKeyword'),
@@ -98,7 +98,7 @@ INSERT INTO `language_en` VALUES
 (46,'SMS_ERROR_SERVICE_CODE_NOT_PRESENT','No Service Code was present in your request.Reply "help"to get help on sumitting Service Requests.','Error'),
 (47,'SMS_ERROR_INCORRECT_OPTION_CHOSEN','You have chosen an incorrect option.','Error'),
 (48,'SMS_ERROR_INVALID_SERVICE_REQUEST_ID','You have sent an incorrect Service Request Id','Error'),
-(49,'SMS_ERROR_NO_SERVICE_REQUEST_ID_PRESENT','No Service Request Id was present in your request.Reply"help"to get help on checking request status.','Error');
+(49,'SMS_ERROR_NO_SERVICE_REQUEST_ID_PRESENT','No Service Request Id was present in your request.Reply"help"to get help on checking request status.','Error'),
 (50,'SMS_ERROR_CANNOT_SKIP_REQUIRED_FIELD','This is a required field.You cannot skip this.Please reply with the answer','Error');
 
 CREATE TABLE `query_record` (
