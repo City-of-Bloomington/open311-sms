@@ -9,7 +9,7 @@ $(document).ready(function(){
 			dataType: "xml",
   			url: BaseURI+"/simulator/getResponse",
 			async: true,
-			data:{"From":"123","Body":SMSText,"format":"xml"},
+			data:{"From":From,"Body":SMSText,"format":"xml"},
 			success:function(xml){
 				$("#SMSResponse").empty();
 				var data = $('Sms',xml).text();
